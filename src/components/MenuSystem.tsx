@@ -58,7 +58,7 @@ const MenuSystem = () => {
 
         {/* Sub Items Grid */}
         <motion.div
-          className="grid grid-cols-3 gap-4 mb-8"
+          className="grid grid-cols-3 gap-4"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
@@ -81,18 +81,6 @@ const MenuSystem = () => {
               </motion.button>
             ))}
         </motion.div>
-
-        {/* Selected Item Display Box */}
-        {selectedItem && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-menu-darker/80 p-6 rounded-lg backdrop-blur-sm border border-menu-highlight/20"
-          >
-            <h3 className="text-menu-text text-lg font-medium mb-2">Selected Transition:</h3>
-            <p className="text-menu-text text-2xl font-bold">{selectedItem}</p>
-          </motion.div>
-        )}
       </div>
     </div>
   );
