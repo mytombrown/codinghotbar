@@ -79,7 +79,9 @@ const MenuSystem = () => {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="text-sm font-medium tracking-wide">{item.label}</span>
+            <span className="text-sm font-medium tracking-wide">
+              {selectedItems[item.id] || item.label}
+            </span>
           </motion.button>
         ))}
       </div>
