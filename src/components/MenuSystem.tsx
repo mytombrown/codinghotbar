@@ -10,6 +10,7 @@ interface MenuItem {
 interface SideMenuItem {
   id: string;
   label: string;
+  items?: string[];
 }
 
 const menuItems: MenuItem[] = [
@@ -36,7 +37,11 @@ const menuItems: MenuItem[] = [
 ];
 
 const sideMenuItems: SideMenuItem[] = [
-  { id: 'source', label: 'SOURCE' },
+  { 
+    id: 'source', 
+    label: 'SOURCE',
+    items: ['CAM 1', 'CAM 2', 'CAM 3', 'CAM 4', 'CAM 5', 'CAM 6', 'DDR 1', 'DDR 2', 'GFX 1']
+  },
   { id: 'audio', label: 'AUDIO' },
   { id: 'ptz', label: 'PTZ' },
   { id: 'grfx', label: 'GRFX' },
@@ -121,9 +126,24 @@ const MenuSystem = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {menuItems
-            .find((category) => category.id === activeCategory)
-            ?.items.map((item) => (
+          {selectedSideItem && sideMenuItems.find(item => item.id === selectedSideItem)?.items ? (
+            sideMenuItems.find(item => item.id === selectedSideItem)?.items?.map((item) => (
+              <motion.button
+                key={item}
+                onClick={() => handleItemSelect(selectedSideItem, item)}
+                className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+                  selectedItems[selectedSideItem] === item
+                    ? 'bg-menu-active text-white shadow-lg'
+                    : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+                }`}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="text-sm font-medium tracking-wide">{item}</span>
+              </motion.button>
+            ))
+          ) : (
+            menuItems.find((category) => category.id === activeCategory)?.items.map((item) => (
               <motion.button
                 key={item}
                 onClick={() => handleItemSelect(activeCategory, item)}
@@ -137,7 +157,8 @@ const MenuSystem = () => {
               >
                 <span className="text-sm font-medium tracking-wide">{item}</span>
               </motion.button>
-            ))}
+            ))
+          )}
         </motion.div>
       </div>
     </div>
