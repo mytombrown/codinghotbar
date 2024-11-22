@@ -1,21 +1,8 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-
-interface MenuItem {
-  id: string;
-  label: string;
-  items: string[];
-}
-
-interface SideMenuItem {
-  id: string;
-  label: string;
-  items?: Array<{
-    id: string;
-    label: string;
-    hasLR?: boolean;
-  }>;
-}
+import { MenuItem, SideMenuItem } from '../types/menu';
+import SideMenu from './SideMenu';
+import GridItems from './GridItems';
 
 const menuItems: MenuItem[] = [
   {
@@ -80,21 +67,38 @@ const sideMenuItems: SideMenuItem[] = [
 
 const MenuSystem = () => {
   const [activeCategory, setActiveCategory] = useState<string>('transition');
-  const [selectedItems, setSelectedItems] = useState<Record<string, string>>({});
+  const [selectedItems, setSelectedItems] = useState<Record<string, string[]>>({});
   const [selectedSideItem, setSelectedSideItem] = useState<string | null>(null);
   const [showSideItems, setShowSideItems] = useState(false);
 
   const handleItemSelect = (categoryId: string, item: string, side?: 'L' | 'R') => {
-    setSelectedItems(prev => ({
-      ...prev,
-      [categoryId]: side ? `${item} ${side}` : item
-    }));
+    const itemLabel = side ? `${item} ${side}` : item;
+    
+    setSelectedItems(prev => {
+      // For audio items, allow multiple selections
+      if (categoryId === 'audio') {
+        const currentItems = prev[categoryId] || [];
+        const itemExists = currentItems.includes(itemLabel);
+        
+        return {
+          ...prev,
+          [categoryId]: itemExists
+            ? currentItems.filter(i => i !== itemLabel)
+            : [...currentItems, itemLabel]
+        };
+      }
+      
+      // For other categories, keep single selection behavior
+      return {
+        ...prev,
+        [categoryId]: [itemLabel]
+      };
+    });
   };
 
   const handleSideItemClick = (itemId: string) => {
     setSelectedSideItem(itemId);
     setShowSideItems(true);
-    // Reset active category to ensure top menu items don't show
     setActiveCategory('');
   };
 
@@ -104,100 +108,16 @@ const MenuSystem = () => {
     setSelectedSideItem(null);
   };
 
-  const renderGridItems = () => {
-    if (showSideItems && selectedSideItem) {
-      const selectedMenu = sideMenuItems.find(item => item.id === selectedSideItem);
-      if (!selectedMenu?.items) return null;
-
-      return selectedMenu.items.map((item) => (
-        item.hasLR ? (
-          <div key={item.id} className="flex gap-1">
-            <motion.button
-              onClick={() => handleItemSelect(selectedSideItem, item.label, 'L')}
-              className={`flex-1 p-6 rounded-l-lg backdrop-blur-sm transition-all duration-300 ${
-                selectedItems[selectedSideItem] === `${item.label} L`
-                  ? 'bg-menu-active text-white shadow-lg'
-                  : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-              }`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="text-sm font-medium tracking-wide">{item.label} L</span>
-            </motion.button>
-            <motion.button
-              onClick={() => handleItemSelect(selectedSideItem, item.label, 'R')}
-              className={`flex-1 p-6 rounded-r-lg backdrop-blur-sm transition-all duration-300 ${
-                selectedItems[selectedSideItem] === `${item.label} R`
-                  ? 'bg-menu-active text-white shadow-lg'
-                  : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-              }`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="text-sm font-medium tracking-wide">{item.label} R</span>
-            </motion.button>
-          </div>
-        ) : (
-          <motion.button
-            key={item.id}
-            onClick={() => handleItemSelect(selectedSideItem, item.label)}
-            className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-              selectedItems[selectedSideItem] === item.label
-                ? 'bg-menu-active text-white shadow-lg'
-                : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-            }`}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <span className="text-sm font-medium tracking-wide">{item.label}</span>
-          </motion.button>
-        )
-      ));
-    }
-
-    return menuItems.find((category) => category.id === activeCategory)?.items.map((item) => (
-      <motion.button
-        key={item}
-        onClick={() => handleItemSelect(activeCategory, item)}
-        className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-          selectedItems[activeCategory] === item
-            ? 'bg-menu-active text-white shadow-lg'
-            : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-        }`}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <span className="text-sm font-medium tracking-wide">{item}</span>
-      </motion.button>
-    ));
-  };
-
   return (
     <div className="min-h-screen bg-menu-dark p-8 flex">
-      {/* Side Menu */}
-      <div className="w-32 space-y-2 mr-8">
-        {sideMenuItems.map((item) => (
-          <motion.button
-            key={item.id}
-            onClick={() => handleSideItemClick(item.id)}
-            className={`w-full p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-              selectedSideItem === item.id
-                ? 'bg-menu-active text-white shadow-lg'
-                : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-            }`}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <span className="text-sm font-medium tracking-wide">
-              {selectedItems[item.id] || item.label}
-            </span>
-          </motion.button>
-        ))}
-      </div>
+      <SideMenu
+        items={sideMenuItems}
+        selectedSideItem={selectedSideItem}
+        selectedItems={selectedItems}
+        onItemClick={handleSideItemClick}
+      />
 
-      {/* Main Content */}
       <div className="flex-1">
-        {/* Main Categories */}
         <div className="grid grid-cols-4 gap-4">
           {menuItems.map((category) => (
             <div key={category.id} className="space-y-2">
@@ -214,30 +134,36 @@ const MenuSystem = () => {
                 <span className="text-sm font-medium tracking-wide">{category.label}</span>
               </motion.button>
               
-              {/* Selected item display */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className={`h-10 rounded-lg p-2 flex items-center justify-center text-sm ${
-                  selectedItems[category.id]
+                  selectedItems[category.id]?.length > 0
                     ? 'bg-menu-active text-white'
                     : 'bg-menu-darker/40 text-transparent'
                 }`}
               >
-                {selectedItems[category.id] || '.'}
+                {selectedItems[category.id]?.join(', ') || '.'}
               </motion.div>
             </div>
           ))}
         </div>
 
-        {/* Sub Items Grid */}
         <motion.div
           className="grid grid-cols-3 gap-4 mt-6"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {renderGridItems()}
+          <GridItems
+            showSideItems={showSideItems}
+            selectedSideItem={selectedSideItem}
+            sideMenuItems={sideMenuItems}
+            menuItems={menuItems}
+            activeCategory={activeCategory}
+            selectedItems={selectedItems}
+            onItemSelect={handleItemSelect}
+          />
         </motion.div>
       </div>
     </div>
