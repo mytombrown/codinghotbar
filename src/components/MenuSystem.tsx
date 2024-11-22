@@ -10,7 +10,11 @@ interface MenuItem {
 interface SideMenuItem {
   id: string;
   label: string;
-  items?: string[];
+  items?: Array<{
+    id: string;
+    label: string;
+    hasLR?: boolean;
+  }>;
 }
 
 const menuItems: MenuItem[] = [
@@ -40,9 +44,32 @@ const sideMenuItems: SideMenuItem[] = [
   { 
     id: 'source', 
     label: 'SOURCE',
-    items: ['CAM 1', 'CAM 2', 'CAM 3', 'CAM 4', 'CAM 5', 'CAM 6', 'DDR 1', 'DDR 2', 'GFX 1']
+    items: [
+      { id: 'cam1', label: 'CAM 1' },
+      { id: 'cam2', label: 'CAM 2' },
+      { id: 'cam3', label: 'CAM 3' },
+      { id: 'cam4', label: 'CAM 4' },
+      { id: 'cam5', label: 'CAM 5' },
+      { id: 'cam6', label: 'CAM 6' },
+      { id: 'ddr1', label: 'DDR 1' },
+      { id: 'ddr2', label: 'DDR 2' },
+      { id: 'gfx1', label: 'GFX 1' }
+    ]
   },
-  { id: 'audio', label: 'AUDIO' },
+  { 
+    id: 'audio', 
+    label: 'AUDIO',
+    items: [
+      { id: 'mic1', label: 'MIC 1', hasLR: true },
+      { id: 'mic2', label: 'MIC 2', hasLR: true },
+      { id: 'mic3', label: 'MIC 3', hasLR: true },
+      { id: 'mic4', label: 'MIC 4', hasLR: true },
+      { id: 'line1', label: 'LINE 1', hasLR: true },
+      { id: 'line2', label: 'LINE 2', hasLR: true },
+      { id: 'aux1', label: 'AUX 1', hasLR: true },
+      { id: 'aux2', label: 'AUX 2', hasLR: true }
+    ]
+  },
   { id: 'ptz', label: 'PTZ' },
   { id: 'grfx', label: 'GRFX' },
   { id: 'clips', label: 'CLIPS' },
@@ -56,10 +83,10 @@ const MenuSystem = () => {
   const [selectedItems, setSelectedItems] = useState<Record<string, string>>({});
   const [selectedSideItem, setSelectedSideItem] = useState<string | null>(null);
 
-  const handleItemSelect = (categoryId: string, item: string) => {
+  const handleItemSelect = (categoryId: string, item: string, side?: 'L' | 'R') => {
     setSelectedItems(prev => ({
       ...prev,
-      [categoryId]: item
+      [categoryId]: side ? `${item} ${side}` : item
     }));
   };
 
@@ -130,19 +157,48 @@ const MenuSystem = () => {
         >
           {selectedSideItem && sideMenuItems.find(item => item.id === selectedSideItem)?.items ? (
             sideMenuItems.find(item => item.id === selectedSideItem)?.items?.map((item) => (
-              <motion.button
-                key={item}
-                onClick={() => handleItemSelect(selectedSideItem, item)}
-                className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-                  selectedItems[selectedSideItem] === item
-                    ? 'bg-menu-active text-white shadow-lg'
-                    : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-                }`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span className="text-sm font-medium tracking-wide">{item}</span>
-              </motion.button>
+              item.hasLR ? (
+                <div key={item.id} className="flex gap-1">
+                  <motion.button
+                    onClick={() => handleItemSelect(selectedSideItem, item.label, 'L')}
+                    className={`flex-1 p-6 rounded-l-lg backdrop-blur-sm transition-all duration-300 ${
+                      selectedItems[selectedSideItem] === `${item.label} L`
+                        ? 'bg-menu-active text-white shadow-lg'
+                        : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span className="text-sm font-medium tracking-wide">{item.label} L</span>
+                  </motion.button>
+                  <motion.button
+                    onClick={() => handleItemSelect(selectedSideItem, item.label, 'R')}
+                    className={`flex-1 p-6 rounded-r-lg backdrop-blur-sm transition-all duration-300 ${
+                      selectedItems[selectedSideItem] === `${item.label} R`
+                        ? 'bg-menu-active text-white shadow-lg'
+                        : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+                    }`}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <span className="text-sm font-medium tracking-wide">{item.label} R</span>
+                  </motion.button>
+                </div>
+              ) : (
+                <motion.button
+                  key={item.id}
+                  onClick={() => handleItemSelect(selectedSideItem, item.label)}
+                  className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+                    selectedItems[selectedSideItem] === item.label
+                      ? 'bg-menu-active text-white shadow-lg'
+                      : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+                  }`}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <span className="text-sm font-medium tracking-wide">{item.label}</span>
+                </motion.button>
+              )
             ))
           ) : (
             menuItems.find((category) => category.id === activeCategory)?.items.map((item) => (
