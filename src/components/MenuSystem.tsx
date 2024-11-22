@@ -82,12 +82,94 @@ const MenuSystem = () => {
   const [activeCategory, setActiveCategory] = useState<string>('transition');
   const [selectedItems, setSelectedItems] = useState<Record<string, string>>({});
   const [selectedSideItem, setSelectedSideItem] = useState<string | null>(null);
+  const [showSideItems, setShowSideItems] = useState(false);
 
   const handleItemSelect = (categoryId: string, item: string, side?: 'L' | 'R') => {
     setSelectedItems(prev => ({
       ...prev,
       [categoryId]: side ? `${item} ${side}` : item
     }));
+  };
+
+  const handleSideItemClick = (itemId: string) => {
+    setSelectedSideItem(itemId);
+    setShowSideItems(true);
+    // Reset active category to ensure top menu items don't show
+    setActiveCategory('');
+  };
+
+  const handleTopMenuClick = (categoryId: string) => {
+    setActiveCategory(categoryId);
+    setShowSideItems(false);
+    setSelectedSideItem(null);
+  };
+
+  const renderGridItems = () => {
+    if (showSideItems && selectedSideItem) {
+      const selectedMenu = sideMenuItems.find(item => item.id === selectedSideItem);
+      if (!selectedMenu?.items) return null;
+
+      return selectedMenu.items.map((item) => (
+        item.hasLR ? (
+          <div key={item.id} className="flex gap-1">
+            <motion.button
+              onClick={() => handleItemSelect(selectedSideItem, item.label, 'L')}
+              className={`flex-1 p-6 rounded-l-lg backdrop-blur-sm transition-all duration-300 ${
+                selectedItems[selectedSideItem] === `${item.label} L`
+                  ? 'bg-menu-active text-white shadow-lg'
+                  : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+              }`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="text-sm font-medium tracking-wide">{item.label} L</span>
+            </motion.button>
+            <motion.button
+              onClick={() => handleItemSelect(selectedSideItem, item.label, 'R')}
+              className={`flex-1 p-6 rounded-r-lg backdrop-blur-sm transition-all duration-300 ${
+                selectedItems[selectedSideItem] === `${item.label} R`
+                  ? 'bg-menu-active text-white shadow-lg'
+                  : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+              }`}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="text-sm font-medium tracking-wide">{item.label} R</span>
+            </motion.button>
+          </div>
+        ) : (
+          <motion.button
+            key={item.id}
+            onClick={() => handleItemSelect(selectedSideItem, item.label)}
+            className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+              selectedItems[selectedSideItem] === item.label
+                ? 'bg-menu-active text-white shadow-lg'
+                : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+            }`}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <span className="text-sm font-medium tracking-wide">{item.label}</span>
+          </motion.button>
+        )
+      ));
+    }
+
+    return menuItems.find((category) => category.id === activeCategory)?.items.map((item) => (
+      <motion.button
+        key={item}
+        onClick={() => handleItemSelect(activeCategory, item)}
+        className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+          selectedItems[activeCategory] === item
+            ? 'bg-menu-active text-white shadow-lg'
+            : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+        }`}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        <span className="text-sm font-medium tracking-wide">{item}</span>
+      </motion.button>
+    ));
   };
 
   return (
@@ -97,7 +179,7 @@ const MenuSystem = () => {
         {sideMenuItems.map((item) => (
           <motion.button
             key={item.id}
-            onClick={() => setSelectedSideItem(item.id)}
+            onClick={() => handleSideItemClick(item.id)}
             className={`w-full p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
               selectedSideItem === item.id
                 ? 'bg-menu-active text-white shadow-lg'
@@ -120,7 +202,7 @@ const MenuSystem = () => {
           {menuItems.map((category) => (
             <div key={category.id} className="space-y-2">
               <motion.button
-                onClick={() => setActiveCategory(category.id)}
+                onClick={() => handleTopMenuClick(category.id)}
                 className={`w-full p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
                   activeCategory === category.id
                     ? 'bg-menu-active text-white shadow-lg'
@@ -155,68 +237,7 @@ const MenuSystem = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {selectedSideItem && sideMenuItems.find(item => item.id === selectedSideItem)?.items ? (
-            sideMenuItems.find(item => item.id === selectedSideItem)?.items?.map((item) => (
-              item.hasLR ? (
-                <div key={item.id} className="flex gap-1">
-                  <motion.button
-                    onClick={() => handleItemSelect(selectedSideItem, item.label, 'L')}
-                    className={`flex-1 p-6 rounded-l-lg backdrop-blur-sm transition-all duration-300 ${
-                      selectedItems[selectedSideItem] === `${item.label} L`
-                        ? 'bg-menu-active text-white shadow-lg'
-                        : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-                    }`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <span className="text-sm font-medium tracking-wide">{item.label} L</span>
-                  </motion.button>
-                  <motion.button
-                    onClick={() => handleItemSelect(selectedSideItem, item.label, 'R')}
-                    className={`flex-1 p-6 rounded-r-lg backdrop-blur-sm transition-all duration-300 ${
-                      selectedItems[selectedSideItem] === `${item.label} R`
-                        ? 'bg-menu-active text-white shadow-lg'
-                        : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-                    }`}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <span className="text-sm font-medium tracking-wide">{item.label} R</span>
-                  </motion.button>
-                </div>
-              ) : (
-                <motion.button
-                  key={item.id}
-                  onClick={() => handleItemSelect(selectedSideItem, item.label)}
-                  className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-                    selectedItems[selectedSideItem] === item.label
-                      ? 'bg-menu-active text-white shadow-lg'
-                      : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-                  }`}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <span className="text-sm font-medium tracking-wide">{item.label}</span>
-                </motion.button>
-              )
-            ))
-          ) : (
-            menuItems.find((category) => category.id === activeCategory)?.items.map((item) => (
-              <motion.button
-                key={item}
-                onClick={() => handleItemSelect(activeCategory, item)}
-                className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-                  selectedItems[activeCategory] === item
-                    ? 'bg-menu-active text-white shadow-lg'
-                    : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-                }`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span className="text-sm font-medium tracking-wide">{item}</span>
-              </motion.button>
-            ))
-          )}
+          {renderGridItems()}
         </motion.div>
       </div>
     </div>
