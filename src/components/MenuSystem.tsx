@@ -32,33 +32,54 @@ const menuItems: MenuItem[] = [
 
 const MenuSystem = () => {
   const [activeCategory, setActiveCategory] = useState<string>('transition');
-  const [selectedItem, setSelectedItem] = useState<string>('');
+  const [selectedItems, setSelectedItems] = useState<Record<string, string>>({});
+
+  const handleItemSelect = (categoryId: string, item: string) => {
+    setSelectedItems(prev => ({
+      ...prev,
+      [categoryId]: item
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-menu-dark p-8">
       <div className="max-w-7xl mx-auto">
         {/* Main Categories */}
-        <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-4 gap-4">
           {menuItems.map((category) => (
-            <motion.button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-                activeCategory === category.id
-                  ? 'bg-menu-active text-white shadow-lg'
-                  : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-              }`}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="text-sm font-medium tracking-wide">{category.label}</span>
-            </motion.button>
+            <div key={category.id} className="space-y-2">
+              <motion.button
+                onClick={() => setActiveCategory(category.id)}
+                className={`w-full p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+                  activeCategory === category.id
+                    ? 'bg-menu-active text-white shadow-lg'
+                    : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+                }`}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span className="text-sm font-medium tracking-wide">{category.label}</span>
+              </motion.button>
+              
+              {/* Blank space or selected item */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className={`h-10 rounded-lg p-2 flex items-center justify-center text-sm ${
+                  selectedItems[category.id]
+                    ? 'bg-menu-active text-white'
+                    : 'bg-menu-darker/40 text-transparent'
+                }`}
+              >
+                {selectedItems[category.id] || '.'}
+              </motion.div>
+            </div>
           ))}
         </div>
 
         {/* Sub Items Grid */}
         <motion.div
-          className="grid grid-cols-3 gap-4"
+          className="grid grid-cols-3 gap-4 mt-6"
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
@@ -68,9 +89,9 @@ const MenuSystem = () => {
             ?.items.map((item) => (
               <motion.button
                 key={item}
-                onClick={() => setSelectedItem(item)}
+                onClick={() => handleItemSelect(activeCategory, item)}
                 className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-                  selectedItem === item
+                  selectedItems[activeCategory] === item
                     ? 'bg-menu-active text-white shadow-lg'
                     : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
                 }`}
