@@ -66,12 +66,11 @@ const sideMenuItems: SideMenuItem[] = [
   { 
     id: 'music', 
     label: 'MUSIC',
-    items: [
-      { id: 'music1', label: 'MUSIC 1', hasLR: true },
-      { id: 'music2', label: 'MUSIC 2', hasLR: true },
-      { id: 'music3', label: 'MUSIC 3', hasLR: true },
-      { id: 'music4', label: 'MUSIC 4', hasLR: true }
-    ]
+    items: Array.from({ length: 10 }, (_, i) => ({
+      id: `track${i + 1}`,
+      label: `Track ${i + 1}`,
+      hasLevel: true
+    }))
   }
 ];
 
@@ -80,6 +79,7 @@ const MenuSystem = () => {
   const [selectedItems, setSelectedItems] = useState<Record<string, string[]>>({});
   const [selectedSideItem, setSelectedSideItem] = useState<string | null>(null);
   const [showSideItems, setShowSideItems] = useState(false);
+  const [musicLevels, setMusicLevels] = useState<Record<string, string>>({});
 
   const handleItemSelect = (categoryId: string, item: string, side?: 'L' | 'R') => {
     const itemLabel = side ? `${item} ${side}` : item;
@@ -104,6 +104,13 @@ const MenuSystem = () => {
         [categoryId]: [itemLabel]
       };
     });
+  };
+
+  const handleMusicLevelChange = (trackId: string, level: string) => {
+    setMusicLevels(prev => ({
+      ...prev,
+      [trackId]: level
+    }));
   };
 
   const handleSideItemClick = (itemId: string) => {
@@ -173,6 +180,8 @@ const MenuSystem = () => {
             activeCategory={activeCategory}
             selectedItems={selectedItems}
             onItemSelect={handleItemSelect}
+            musicLevels={musicLevels}
+            onMusicLevelChange={handleMusicLevelChange}
           />
         </motion.div>
       </div>

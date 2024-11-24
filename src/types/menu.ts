@@ -11,6 +11,7 @@ export interface SideMenuItem {
     id: string;
     label: string;
     hasLR?: boolean;
+    hasLevel?: boolean;
   }>;
 }
 
