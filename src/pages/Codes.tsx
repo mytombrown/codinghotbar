@@ -172,7 +172,7 @@ const Codes = () => {
                     </div>
                     <div className="h-96 mt-4">
                       <iframe 
-                        src="/codes" 
+                        src="/rundown-preview" 
                         className="w-full h-full rounded-lg border border-gray-700"
                         title="Rundown Preview"
                       />
