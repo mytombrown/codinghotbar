@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { MenuItem, SideMenuItem } from '../types/menu';
-import Image from 'next/image';
 
 interface GridItemsProps {
   showSideItems: boolean;
