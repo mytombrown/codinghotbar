@@ -59,7 +59,30 @@ const sideMenuItems: SideMenuItem[] = [
   },
   { id: 'ptz', label: 'PTZ' },
   { id: 'grfx', label: 'GRFX' },
-  { id: 'clips', label: 'CLIPS' },
+  { 
+    id: 'clips', 
+    label: 'CLIPS',
+    items: [
+      { 
+        id: 'clip1', 
+        label: 'Big Buck Bunny',
+        previewImage: '/placeholder.svg',
+        duration: '00:30:00'
+      },
+      { 
+        id: 'clip2', 
+        label: 'Nature Documentary',
+        previewImage: '/photo-1649972904349-6e44c42644a7',
+        duration: '01:05:29'
+      },
+      { 
+        id: 'clip3', 
+        label: 'Tech Review',
+        previewImage: '/photo-1488590528505-98d2b5aba04b',
+        duration: '00:31:04'
+      }
+    ]
+  },
   { id: 'me', label: 'ME' },
   { id: 'l3', label: 'L3' },
   { id: 'ext-dev', label: 'EXT DEV' },

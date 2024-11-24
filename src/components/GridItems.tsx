@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { MenuItem, SideMenuItem } from '../types/menu';
+import Image from 'next/image';
 
 interface GridItemsProps {
   showSideItems: boolean;
@@ -28,8 +29,38 @@ const GridItems = ({
     const selectedMenu = sideMenuItems.find(item => item.id === selectedSideItem);
     if (!selectedMenu?.items) return null;
 
-    return selectedMenu.items.map((item) => {
-      if (selectedSideItem === 'music' && item.hasLevel) {
+    if (selectedSideItem === 'clips') {
+      return selectedMenu.items.map((item) => (
+        <motion.button
+          key={item.id}
+          onClick={() => onItemSelect(selectedSideItem, item.label)}
+          className={`relative p-2 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+            selectedItems[selectedSideItem]?.includes(item.label)
+              ? 'bg-menu-active text-white shadow-lg'
+              : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+          }`}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="aspect-video relative mb-2 rounded-md overflow-hidden">
+            <img
+              src={item.previewImage}
+              alt={item.label}
+              className="w-full h-full object-cover"
+            />
+            {item.duration && (
+              <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-xs text-white">
+                {item.duration}
+              </div>
+            )}
+          </div>
+          <span className="text-sm font-medium tracking-wide block">{item.label}</span>
+        </motion.button>
+      ));
+    }
+
+    if (selectedSideItem === 'music' && selectedMenu.items.some(item => item.hasLevel)) {
+      return selectedMenu.items.map((item) => {
         return (
           <div key={item.id} className="flex gap-2 items-center">
             <motion.button
@@ -53,9 +84,11 @@ const GridItems = ({
             />
           </div>
         );
-      }
+      });
+    }
 
-      if (item.hasLR) {
+    if (selectedMenu.items.some(item => item.hasLR)) {
+      return selectedMenu.items.map((item) => {
         return (
           <div key={item.id} className="flex gap-1">
             <motion.button
@@ -84,24 +117,24 @@ const GridItems = ({
             </motion.button>
           </div>
         );
-      }
+      });
+    }
 
-      return (
-        <motion.button
-          key={item.id}
-          onClick={() => onItemSelect(selectedSideItem, item.label)}
-          className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-            selectedItems[selectedSideItem]?.includes(item.label)
-              ? 'bg-menu-active text-white shadow-lg'
-              : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-          }`}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <span className="text-sm font-medium tracking-wide">{item.label}</span>
-        </motion.button>
-      );
-    });
+    return selectedMenu.items.map((item) => (
+      <motion.button
+        key={item.id}
+        onClick={() => onItemSelect(selectedSideItem, item.label)}
+        className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+          selectedItems[selectedSideItem]?.includes(item.label)
+            ? 'bg-menu-active text-white shadow-lg'
+            : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+        }`}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        <span className="text-sm font-medium tracking-wide">{item.label}</span>
+      </motion.button>
+    ));
   }
 
   return menuItems.find((category) => category.id === activeCategory)?.items.map((item) => (

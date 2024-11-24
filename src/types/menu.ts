@@ -12,6 +12,8 @@ export interface SideMenuItem {
     label: string;
     hasLR?: boolean;
     hasLevel?: boolean;
+    previewImage?: string;
+    duration?: string;
   }>;
 }
 
