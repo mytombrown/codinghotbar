@@ -143,6 +143,8 @@ const MenuSystem = () => {
                 className={`w-full p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
                   activeCategory === category.id
                     ? 'bg-menu-active text-white shadow-lg'
+                    : selectedItems[category.id]?.length > 0
+                    ? 'bg-green-600 text-white'
                     : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
                 }`}
                 whileHover={{ scale: 1.02 }}
