@@ -101,17 +101,20 @@ const Codes = () => {
                   {savedCodes.map((code, index) => (
                     <Draggable key={code.id} draggableId={code.id} index={index}>
                       {(provided) => (
-                        <motion.div
+                        <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          onClick={() => handleEditCode(code)}
-                          className="p-6 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
                         >
-                          <span className="text-sm font-medium tracking-wide">{code.name}</span>
-                        </motion.div>
+                          <motion.div
+                            onClick={() => handleEditCode(code)}
+                            className="p-6 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                          >
+                            <span className="text-sm font-medium tracking-wide">{code.name}</span>
+                          </motion.div>
+                        </div>
                       )}
                     </Draggable>
                   ))}
@@ -135,14 +138,17 @@ const Codes = () => {
                   {rundownItems.map((item, index) => (
                     <Draggable key={item.rundownId} draggableId={item.rundownId} index={index}>
                       {(provided) => (
-                        <motion.div
+                        <div
                           ref={provided.innerRef}
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
-                          className="p-4 rounded-lg bg-menu-darker text-white cursor-move"
                         >
-                          {item.name}
-                        </motion.div>
+                          <motion.div
+                            className="p-4 rounded-lg bg-menu-darker text-white cursor-move"
+                          >
+                            {item.name}
+                          </motion.div>
+                        </div>
                       )}
                     </Draggable>
                   ))}
