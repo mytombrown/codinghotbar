@@ -17,7 +17,9 @@ const SideMenu = ({ items, selectedSideItem, selectedItems, onItemClick }: SideM
           onClick={() => onItemClick(item.id)}
           className={`w-full p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
             selectedSideItem === item.id
-              ? 'bg-menu-active text-white shadow-lg'
+              ? selectedItems[item.id]?.length > 0
+                ? 'bg-green-800 text-white shadow-lg'
+                : 'bg-menu-active text-white shadow-lg'
               : selectedItems[item.id]?.length > 0
               ? 'bg-green-600 text-white'
               : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
