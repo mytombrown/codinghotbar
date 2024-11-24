@@ -121,6 +121,21 @@ const MenuSystem = () => {
     );
   };
 
+  const handleLowerThirdTextChange = (clipId: string, index: number, text: string) => {
+    setClips(prevClips =>
+      prevClips.map(clip =>
+        clip.id === clipId
+          ? {
+              ...clip,
+              lowerThirds: clip.lowerThirds?.map((lt, i) =>
+                i === index ? { ...lt, text } : lt
+              ) || []
+            }
+          : clip
+      )
+    );
+  };
+
   const handleItemSelect = (categoryId: string, item: string, side?: 'L' | 'R') => {
     const itemLabel = side ? `${item} ${side}` : item;
     
@@ -230,6 +245,7 @@ const MenuSystem = () => {
             onItemSelect={handleItemSelect}
             musicLevels={musicLevels}
             onMusicLevelChange={handleMusicLevelChange}
+            onLowerThirdTextChange={handleLowerThirdTextChange}
           />
         </motion.div>
       </div>

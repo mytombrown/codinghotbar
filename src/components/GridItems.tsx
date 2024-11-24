@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { MenuItem, SideMenuItem, LowerThirdData } from '../types/menu';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Plus } from 'lucide-react';
+import { Input } from './ui/input';
 
 interface GridItemsProps {
   showSideItems: boolean;
@@ -13,6 +14,7 @@ interface GridItemsProps {
   onItemSelect: (categoryId: string, item: string, side?: 'L' | 'R') => void;
   musicLevels?: Record<string, string>;
   onMusicLevelChange?: (trackId: string, level: string) => void;
+  onLowerThirdTextChange?: (clipId: string, index: number, text: string) => void;
 }
 
 const GridItems = ({
@@ -25,6 +27,7 @@ const GridItems = ({
   onItemSelect,
   musicLevels = {},
   onMusicLevelChange,
+  onLowerThirdTextChange,
 }: GridItemsProps) => {
   const handleAddLowerThird = (clipId: string, type: LowerThirdData['type']) => {
     // This will be implemented in MenuSystem component
@@ -88,10 +91,21 @@ const GridItems = ({
                 </DropdownMenuContent>
               </DropdownMenu>
               {item.lowerThirds && item.lowerThirds.length > 0 && (
-                <div className="mt-2 space-y-1">
+                <div className="mt-2 space-y-2">
                   {item.lowerThirds.map((lt, index) => (
-                    <div key={index} className="px-2 py-1 text-sm bg-menu-darker/60 rounded">
-                      {lt.type}
+                    <div key={index} className="space-y-1">
+                      <div className="px-2 py-1 text-sm bg-menu-darker/60 rounded">
+                        {lt.type}
+                      </div>
+                      {lt.type === 'One Line' && (
+                        <Input
+                          type="text"
+                          value={lt.text || ''}
+                          onChange={(e) => onLowerThirdTextChange?.(item.id, index, e.target.value)}
+                          placeholder="Enter text for lower third..."
+                          className="w-full text-sm"
+                        />
+                      )}
                     </div>
                   ))}
                 </div>

@@ -6,6 +6,7 @@ export interface MenuItem {
 
 export interface LowerThirdData {
   type: 'One Line' | 'Two Line' | 'Courtesy';
+  text?: string;
 }
 
 export interface SideMenuItem {
