@@ -3,6 +3,7 @@ import { MenuItem, SideMenuItem, LowerThirdData } from '../types/menu';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
 import { Plus } from 'lucide-react';
 import { Input } from './ui/input';
+import { cn } from "@/lib/utils";
 
 interface GridItemsProps {
   showSideItems: boolean;
@@ -103,7 +104,10 @@ const GridItems = ({
                           value={lt.text || ''}
                           onChange={(e) => onLowerThirdTextChange?.(item.id, index, e.target.value)}
                           placeholder="Enter text for lower third..."
-                          className="w-full text-sm"
+                          className={cn(
+                            "w-full text-sm",
+                            !lt.text ? "border-red-500 focus:border-red-500" : "border-green-500 focus:border-green-500"
+                          )}
                         />
                       )}
                     </div>
