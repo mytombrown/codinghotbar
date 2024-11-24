@@ -114,7 +114,7 @@ const MenuSystem = () => {
         clip.id === clipId 
           ? { 
               ...clip, 
-              lowerThirds: [...(clip.lowerThirds || []), { type }] 
+              lowerThirds: [...(clip.lowerThirds || []), { type, text: '' }]
             }
           : clip
       )
