@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { useToast } from "@/components/ui/use-toast";
 import { MenuItem, SideMenuItem, LowerThirdData } from '../types/menu';
 import SideMenu from './SideMenu';
 import GridItems from './GridItems';
@@ -101,12 +104,53 @@ const sideMenuItems: SideMenuItem[] = [
 ];
 
 const MenuSystem = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { id } = useParams();
   const [activeCategory, setActiveCategory] = useState<string>('transition');
   const [selectedItems, setSelectedItems] = useState<Record<string, string[]>>({});
   const [selectedSideItem, setSelectedSideItem] = useState<string | null>(null);
   const [showSideItems, setShowSideItems] = useState(false);
   const [musicLevels, setMusicLevels] = useState<Record<string, string>>({});
   const [clips, setClips] = useState(sideMenuItems.find(item => item.id === 'clips')?.items || []);
+
+  useEffect(() => {
+    if (id) {
+      const savedCodes = JSON.parse(localStorage.getItem("saved-codes") || "[]");
+      const code = savedCodes.find((c: any) => c.id === id);
+      if (code) {
+        setSelectedItems(code.data);
+      }
+    }
+  }, [id]);
+
+  const handleSave = () => {
+    const name = prompt("Enter a name for this code:");
+    if (!name) return;
+
+    const savedCodes = JSON.parse(localStorage.getItem("saved-codes") || "[]");
+    const newCode = {
+      id: id || Date.now().toString(),
+      name,
+      data: selectedItems,
+    };
+
+    if (id) {
+      const index = savedCodes.findIndex((c: any) => c.id === id);
+      if (index !== -1) {
+        savedCodes[index] = newCode;
+      }
+    } else {
+      savedCodes.push(newCode);
+    }
+
+    localStorage.setItem("saved-codes", JSON.stringify(savedCodes));
+    toast({
+      title: "Success",
+      description: "Code saved successfully",
+    });
+    navigate("/codes");
+  };
 
   const handleAddLowerThird = (clipId: string, type: LowerThirdData['type']) => {
     setClips(prevClips => 
@@ -193,6 +237,22 @@ const MenuSystem = () => {
       />
 
       <div className="flex-1">
+        <div className="flex justify-between mb-4">
+          <Button
+            onClick={() => navigate("/codes")}
+            variant="outline"
+            className="text-white"
+          >
+            Back
+          </Button>
+          <Button
+            onClick={handleSave}
+            className="bg-green-600 hover:bg-green-700"
+          >
+            Save
+          </Button>
+        </div>
+
         <div className="grid grid-cols-4 gap-4">
           {menuItems.map((category) => (
             <div key={category.id} className="space-y-2">
