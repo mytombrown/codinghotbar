@@ -114,7 +114,10 @@ const MenuSystem = () => {
         clip.id === clipId 
           ? { 
               ...clip, 
-              lowerThirds: [...(clip.lowerThirds || []), { type, text: '' }]
+              lowerThirds: [
+                ...(clip.lowerThirds || []),
+                { type, text: '' }
+              ]
             }
           : clip
       )
@@ -246,6 +249,7 @@ const MenuSystem = () => {
             musicLevels={musicLevels}
             onMusicLevelChange={handleMusicLevelChange}
             onLowerThirdTextChange={handleLowerThirdTextChange}
+            onAddLowerThird={handleAddLowerThird}
           />
         </motion.div>
       </div>

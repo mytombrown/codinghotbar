@@ -16,6 +16,7 @@ interface GridItemsProps {
   musicLevels?: Record<string, string>;
   onMusicLevelChange?: (trackId: string, level: string) => void;
   onLowerThirdTextChange?: (clipId: string, index: number, text: string) => void;
+  onAddLowerThird?: (clipId: string, type: LowerThirdData['type']) => void;
 }
 
 const GridItems = ({
@@ -29,12 +30,8 @@ const GridItems = ({
   musicLevels = {},
   onMusicLevelChange,
   onLowerThirdTextChange,
+  onAddLowerThird,
 }: GridItemsProps) => {
-  const handleAddLowerThird = (clipId: string, type: LowerThirdData['type']) => {
-    // This will be implemented in MenuSystem component
-    console.log('Add lower third:', clipId, type);
-  };
-
   if (showSideItems && selectedSideItem) {
     const selectedMenu = sideMenuItems.find(item => item.id === selectedSideItem);
     if (!selectedMenu?.items) return null;
@@ -80,13 +77,13 @@ const GridItems = ({
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => handleAddLowerThird(item.id, 'One Line')}>
+                  <DropdownMenuItem onClick={() => onAddLowerThird?.(item.id, 'One Line')}>
                     One Line
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleAddLowerThird(item.id, 'Two Line')}>
+                  <DropdownMenuItem onClick={() => onAddLowerThird?.(item.id, 'Two Line')}>
                     Two Line
                   </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => handleAddLowerThird(item.id, 'Courtesy')}>
+                  <DropdownMenuItem onClick={() => onAddLowerThird?.(item.id, 'Courtesy')}>
                     Courtesy
                   </DropdownMenuItem>
                 </DropdownMenuContent>
