@@ -63,6 +63,16 @@ const sideMenuItems: SideMenuItem[] = [
   { id: 'me', label: 'ME' },
   { id: 'l3', label: 'L3' },
   { id: 'ext-dev', label: 'EXT DEV' },
+  { 
+    id: 'music', 
+    label: 'MUSIC',
+    items: [
+      { id: 'music1', label: 'MUSIC 1', hasLR: true },
+      { id: 'music2', label: 'MUSIC 2', hasLR: true },
+      { id: 'music3', label: 'MUSIC 3', hasLR: true },
+      { id: 'music4', label: 'MUSIC 4', hasLR: true }
+    ]
+  }
 ];
 
 const MenuSystem = () => {
@@ -76,7 +86,7 @@ const MenuSystem = () => {
     
     setSelectedItems(prev => {
       // For audio items, allow multiple selections
-      if (categoryId === 'audio') {
+      if (categoryId === 'audio' || categoryId === 'music') {
         const currentItems = prev[categoryId] || [];
         const itemExists = currentItems.includes(itemLabel);
         
