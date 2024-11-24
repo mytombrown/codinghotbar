@@ -102,8 +102,8 @@ const GridItems = ({
                           onChange={(e) => onLowerThirdTextChange?.(item.id, index, e.target.value)}
                           placeholder="Enter text for lower third..."
                           className={cn(
-                            "w-full text-sm",
-                            !lt.text ? "border-red-500 focus:border-red-500" : "border-green-500 focus:border-green-500"
+                            "w-full text-sm border-2",
+                            !lt.text ? "border-red-500 focus:border-red-500 bg-red-50/10" : "border-green-500 focus:border-green-500 bg-green-50/10"
                           )}
                         />
                       )}
