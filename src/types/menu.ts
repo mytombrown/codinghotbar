@@ -4,6 +4,10 @@ export interface MenuItem {
   items: string[];
 }
 
+export interface LowerThirdData {
+  type: 'One Line' | 'Two Line' | 'Courtesy';
+}
+
 export interface SideMenuItem {
   id: string;
   label: string;
@@ -14,6 +18,7 @@ export interface SideMenuItem {
     hasLevel?: boolean;
     previewImage?: string;
     duration?: string;
+    lowerThirds?: LowerThirdData[];
   }>;
 }
 

@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
-import { MenuItem, SideMenuItem } from '../types/menu';
+import { MenuItem, SideMenuItem, LowerThirdData } from '../types/menu';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu';
+import { Plus } from 'lucide-react';
 
 interface GridItemsProps {
   showSideItems: boolean;
@@ -24,37 +26,79 @@ const GridItems = ({
   musicLevels = {},
   onMusicLevelChange,
 }: GridItemsProps) => {
+  const handleAddLowerThird = (clipId: string, type: LowerThirdData['type']) => {
+    // This will be implemented in MenuSystem component
+    console.log('Add lower third:', clipId, type);
+  };
+
   if (showSideItems && selectedSideItem) {
     const selectedMenu = sideMenuItems.find(item => item.id === selectedSideItem);
     if (!selectedMenu?.items) return null;
 
     if (selectedSideItem === 'clips') {
       return selectedMenu.items.map((item) => (
-        <motion.button
+        <motion.div
           key={item.id}
-          onClick={() => onItemSelect(selectedSideItem, item.label)}
-          className={`relative p-2 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-            selectedItems[selectedSideItem]?.includes(item.label)
-              ? 'bg-menu-active text-white shadow-lg'
-              : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-          }`}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          className="relative"
         >
-          <div className="aspect-video relative mb-2 rounded-md overflow-hidden">
-            <img
-              src={item.previewImage}
-              alt={item.label}
-              className="w-full h-full object-cover"
-            />
-            {item.duration && (
-              <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-xs text-white">
-                {item.duration}
-              </div>
-            )}
-          </div>
-          <span className="text-sm font-medium tracking-wide block">{item.label}</span>
-        </motion.button>
+          <motion.button
+            onClick={() => onItemSelect(selectedSideItem, item.label)}
+            className={`relative p-2 rounded-lg backdrop-blur-sm transition-all duration-300 w-full ${
+              selectedItems[selectedSideItem]?.includes(item.label)
+                ? 'bg-menu-active text-white shadow-lg'
+                : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+            }`}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <div className="aspect-video relative mb-2 rounded-md overflow-hidden">
+              <img
+                src={item.previewImage}
+                alt={item.label}
+                className="w-full h-full object-cover"
+              />
+              {item.duration && (
+                <div className="absolute bottom-2 right-2 bg-black/70 px-2 py-1 rounded text-xs text-white">
+                  {item.duration}
+                </div>
+              )}
+            </div>
+            <span className="text-sm font-medium tracking-wide block">{item.label}</span>
+          </motion.button>
+          
+          {selectedItems[selectedSideItem]?.includes(item.label) && (
+            <div className="mt-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-2 px-3 py-1 text-sm text-white bg-green-600 rounded-md hover:bg-green-700">
+                    <Plus className="w-4 h-4" />
+                    Add Lower Third
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => handleAddLowerThird(item.id, 'One Line')}>
+                    One Line
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleAddLowerThird(item.id, 'Two Line')}>
+                    Two Line
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleAddLowerThird(item.id, 'Courtesy')}>
+                    Courtesy
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              {item.lowerThirds && item.lowerThirds.length > 0 && (
+                <div className="mt-2 space-y-1">
+                  {item.lowerThirds.map((lt, index) => (
+                    <div key={index} className="px-2 py-1 text-sm bg-menu-darker/60 rounded">
+                      {lt.type}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </motion.div>
       ));
     }
 

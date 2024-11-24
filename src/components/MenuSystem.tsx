@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { MenuItem, SideMenuItem } from '../types/menu';
+import { MenuItem, SideMenuItem, LowerThirdData } from '../types/menu';
 import SideMenu from './SideMenu';
 import GridItems from './GridItems';
 
@@ -67,19 +67,22 @@ const sideMenuItems: SideMenuItem[] = [
         id: 'clip1', 
         label: 'Big Buck Bunny',
         previewImage: '/placeholder.svg',
-        duration: '00:30:00'
+        duration: '00:30:00',
+        lowerThirds: []
       },
       { 
         id: 'clip2', 
         label: 'Nature Documentary',
         previewImage: '/photo-1649972904349-6e44c42644a7',
-        duration: '01:05:29'
+        duration: '01:05:29',
+        lowerThirds: []
       },
       { 
         id: 'clip3', 
         label: 'Tech Review',
         previewImage: '/photo-1488590528505-98d2b5aba04b',
-        duration: '00:31:04'
+        duration: '00:31:04',
+        lowerThirds: []
       }
     ]
   },
@@ -103,6 +106,20 @@ const MenuSystem = () => {
   const [selectedSideItem, setSelectedSideItem] = useState<string | null>(null);
   const [showSideItems, setShowSideItems] = useState(false);
   const [musicLevels, setMusicLevels] = useState<Record<string, string>>({});
+  const [clips, setClips] = useState(sideMenuItems.find(item => item.id === 'clips')?.items || []);
+
+  const handleAddLowerThird = (clipId: string, type: LowerThirdData['type']) => {
+    setClips(prevClips => 
+      prevClips.map(clip => 
+        clip.id === clipId 
+          ? { 
+              ...clip, 
+              lowerThirds: [...(clip.lowerThirds || []), { type }] 
+            }
+          : clip
+      )
+    );
+  };
 
   const handleItemSelect = (categoryId: string, item: string, side?: 'L' | 'R') => {
     const itemLabel = side ? `${item} ${side}` : item;
@@ -202,7 +219,11 @@ const MenuSystem = () => {
           <GridItems
             showSideItems={showSideItems}
             selectedSideItem={selectedSideItem}
-            sideMenuItems={sideMenuItems}
+            sideMenuItems={[...sideMenuItems.map(item => 
+              item.id === 'clips' 
+                ? { ...item, items: clips }
+                : item
+            )]}
             menuItems={menuItems}
             activeCategory={activeCategory}
             selectedItems={selectedItems}
