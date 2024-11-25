@@ -42,7 +42,7 @@ const Codes = () => {
       if (code) {
         const newRundownItem: RundownItem = {
           ...code,
-          rundownId: Date.now().toString()
+          rundownId: Date.now().toString() // Generate unique rundownId for duplicate items
         };
         setRundownItems(prev => [...prev, newRundownItem]);
       }
@@ -160,6 +160,9 @@ const Codes = () => {
                                     {...provided.dragHandleProps}
                                     className="p-4 rounded-lg bg-menu-darker text-white cursor-move hover:bg-menu-highlight transition-colors"
                                   >
+                                    <span className="inline-block w-8 h-8 mr-3 text-center leading-8 bg-purple-600 rounded-full">
+                                      {index + 1}
+                                    </span>
                                     {item.name}
                                   </div>
                                 )}
