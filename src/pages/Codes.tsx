@@ -32,10 +32,6 @@ const Codes = () => {
     navigate("/new-code");
   };
 
-  const handleEditCode = (code: SavedCode) => {
-    navigate(`/edit-code/${code.id}`);
-  };
-
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
 
@@ -81,22 +77,6 @@ const Codes = () => {
                   New
                 </Button>
                 <Button 
-                  onClick={() => {
-                    if (savedCodes.length === 0) {
-                      toast({
-                        title: "No saved codes",
-                        description: "Create a new code first",
-                        variant: "destructive",
-                      });
-                      return;
-                    }
-                  }}
-                  className="bg-blue-600 hover:bg-blue-700"
-                  disabled={savedCodes.length === 0}
-                >
-                  Edit
-                </Button>
-                <Button
                   onClick={() => setShowRundown(!showRundown)}
                   className="bg-purple-600 hover:bg-purple-700"
                 >
@@ -120,7 +100,6 @@ const Codes = () => {
                             {...provided.dragHandleProps}
                           >
                             <div
-                              onClick={() => handleEditCode(code)}
                               className="p-6 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
                             >
                               <motion.div
@@ -148,7 +127,9 @@ const Codes = () => {
               <ResizableHandle withHandle />
               <ResizablePanel defaultSize={40}>
                 <div className="h-full bg-menu-darker/90 p-4">
-                  <h2 className="text-white text-xl font-bold mb-4">Rundown ({rundownItems.length}/{MAX_RUNDOWN_ITEMS})</h2>
+                  <h2 className="text-white text-xl font-bold mb-4">
+                    Rundown ({rundownItems.length}/{MAX_RUNDOWN_ITEMS})
+                  </h2>
                   <div className="h-[calc(100vh-8rem)] flex flex-col">
                     <div className="flex-grow">
                       <Droppable droppableId="rundown">
