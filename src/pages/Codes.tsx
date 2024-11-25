@@ -20,7 +20,7 @@ const Codes = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [showRundown, setShowRundown] = useState(false);
-  const [savedCodes, setSavedCodes] = useState<SavedCode[]>(() => {
+  const [savedCodes] = useState<SavedCode[]>(() => {
     const saved = localStorage.getItem("saved-codes");
     return saved ? JSON.parse(saved) : [];
   });
