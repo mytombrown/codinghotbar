@@ -42,7 +42,7 @@ const Codes = () => {
       if (code) {
         const newRundownItem: RundownItem = {
           ...code,
-          rundownId: Date.now().toString() // Generate unique rundownId for duplicate items
+          rundownId: `${Date.now()}-${Math.random()}` // Generate unique rundownId for duplicate items
         };
         setRundownItems(prev => [...prev, newRundownItem]);
       }
