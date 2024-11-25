@@ -16,6 +16,8 @@ interface RundownItem extends SavedCode {
   rundownId: string;
 }
 
+const MAX_RUNDOWN_ITEMS = 20;
+
 const Codes = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -38,6 +40,15 @@ const Codes = () => {
     if (!result.destination) return;
 
     if (result.source.droppableId === 'codes' && result.destination.droppableId === 'rundown') {
+      if (rundownItems.length >= MAX_RUNDOWN_ITEMS) {
+        toast({
+          title: "Rundown Full",
+          description: `Cannot add more than ${MAX_RUNDOWN_ITEMS} items to the rundown.`,
+          variant: "destructive",
+        });
+        return;
+      }
+
       const code = savedCodes.find(code => code.id === result.draggableId);
       if (code) {
         const newRundownItem: RundownItem = {
@@ -137,7 +148,7 @@ const Codes = () => {
               <ResizableHandle withHandle />
               <ResizablePanel defaultSize={40}>
                 <div className="h-full bg-menu-darker/90 p-4">
-                  <h2 className="text-white text-xl font-bold mb-4">Rundown</h2>
+                  <h2 className="text-white text-xl font-bold mb-4">Rundown ({rundownItems.length}/{MAX_RUNDOWN_ITEMS})</h2>
                   <div className="h-[calc(100vh-8rem)] flex flex-col">
                     <div className="flex-grow">
                       <Droppable droppableId="rundown">
