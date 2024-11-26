@@ -117,6 +117,7 @@ export const useMenuState = (id?: string) => {
   return {
     activeCategory,
     selectedItems,
+    setSelectedItems,  // Added this line to expose setSelectedItems
     selectedSideItem,
     showSideItems,
     musicLevels,
