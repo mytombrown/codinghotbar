@@ -78,13 +78,21 @@ const MenuSystem = () => {
     setShowSaveDialog(false);
   };
 
+  const handleSideMenuClick = (itemId: string) => {
+    if (itemId === 'clips') {
+      navigate('/clips');
+      return;
+    }
+    handleSideItemClick(itemId);
+  };
+
   return (
     <div className="min-h-screen bg-menu-dark p-8 flex">
       <SideMenu
         items={sideMenuItems}
         selectedSideItem={selectedSideItem}
         selectedItems={selectedItems}
-        onItemClick={handleSideItemClick}
+        onItemClick={handleSideMenuClick}
       />
 
       <div className="flex-1">
