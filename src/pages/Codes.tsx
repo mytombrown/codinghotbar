@@ -31,6 +31,21 @@ const Codes = () => {
     navigate("/new-code");
   };
 
+  const handleDoubleClick = (id: string) => {
+    navigate(`/edit-code/${id}`);
+  };
+
+  // Helper function to get the first source image from the code data
+  const getCodeThumbnail = (data: Record<string, string[]>) => {
+    if (data.source && data.source.length > 0) {
+      const sourceLabel = data.source[0];
+      const audioSources = JSON.parse(localStorage.getItem("audio-sources") || "[]");
+      const source = audioSources.find((s: any) => s.label === sourceLabel);
+      return source?.previewImage || '/placeholder.svg';
+    }
+    return '/placeholder.svg';
+  };
+
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
 
@@ -96,18 +111,23 @@ const Codes = () => {
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                       >
-                        <div
-                          className="p-6 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
+                        <motion.div
+                          onDoubleClick={() => handleDoubleClick(code.id)}
+                          className="p-4 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
                         >
-                          <motion.div
-                            whileHover={{ scale: 1.02 }}
-                            whileTap={{ scale: 0.98 }}
-                          >
-                            <span className="text-sm font-medium tracking-wide text-white">
-                              {code.name}
-                            </span>
-                          </motion.div>
-                        </div>
+                          <div className="aspect-video relative mb-2 rounded-md overflow-hidden">
+                            <img
+                              src={getCodeThumbnail(code.data)}
+                              alt={code.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <span className="text-sm font-medium tracking-wide text-white block text-center">
+                            {code.name}
+                          </span>
+                        </motion.div>
                       </div>
                     )}
                   </Draggable>
