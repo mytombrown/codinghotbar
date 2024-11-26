@@ -13,7 +13,11 @@ const Index = () => {
       <div className="min-h-screen bg-menu-dark">
         <div className="flex flex-col">
           <MenuSystem />
-          {showClipManager && <ClipManager />}
+          {showClipManager && (
+            <div className="p-8">
+              <ClipManager />
+            </div>
+          )}
         </div>
       </div>
     </TooltipProvider>
