@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import SideMenu from './SideMenu';
 import GridItems from './GridItems';
@@ -8,10 +8,12 @@ import { useMenuState } from '../hooks/useMenuState';
 import { menuItems, sideMenuItems } from '../data/menuItems';
 
 const MenuSystem = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   const {
     activeCategory,
     selectedItems,
+    setSelectedItems,
     selectedSideItem,
     showSideItems,
     musicLevels,
@@ -33,7 +35,7 @@ const MenuSystem = () => {
         setSelectedItems(code.data);
       }
     }
-  }, [id]);
+  }, [id, setSelectedItems]);
 
   return (
     <div className="min-h-screen bg-menu-dark p-8 flex">
