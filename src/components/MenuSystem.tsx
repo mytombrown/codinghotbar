@@ -82,9 +82,9 @@ const MenuSystem = () => {
   const handleSideMenuClick = (itemId: string) => {
     if (itemId === 'clips') {
       navigate('/clips');
-      return;
+    } else {
+      handleSideItemClick(itemId);
     }
-    handleSideItemClick(itemId);
   };
 
   // Only show the main menu UI if we're not on the clips page
