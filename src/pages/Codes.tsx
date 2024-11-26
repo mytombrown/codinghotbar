@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useToast } from "@/components/ui/use-toast";
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 
 interface SavedCode {
   id: string;
@@ -21,7 +20,7 @@ const MAX_RUNDOWN_ITEMS = 20;
 const Codes = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [showRundown, setShowRundown] = useState(false);
+  const [showRundown, setShowRundown] = useState(true);
   const [savedCodes, setSavedCodes] = useState<SavedCode[]>(() => {
     const saved = localStorage.getItem("saved-codes");
     return saved ? JSON.parse(saved) : [];
@@ -49,7 +48,7 @@ const Codes = () => {
       if (code) {
         const newRundownItem: RundownItem = {
           ...code,
-          rundownId: `${Date.now()}-${Math.random()}` // Generate unique rundownId for duplicate items
+          rundownId: `${Date.now()}-${Math.random()}`
         };
         setRundownItems(prev => [...prev, newRundownItem]);
       }
@@ -64,121 +63,105 @@ const Codes = () => {
   };
 
   return (
-    <div className="min-h-screen bg-menu-dark">
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel defaultSize={showRundown ? 60 : 100}>
-            <div className="p-8">
-              <div className="flex gap-4 mb-8">
-                <Button 
-                  onClick={handleNewCode}
-                  className="bg-green-600 hover:bg-green-700"
-                >
-                  New
-                </Button>
-                <Button 
-                  onClick={() => setShowRundown(!showRundown)}
-                  className="bg-purple-600 hover:bg-purple-700"
-                >
-                  {showRundown ? 'Hide Rundown' : 'Show Rundown'}
-                </Button>
-              </div>
+    <div className="min-h-screen bg-menu-dark flex flex-col">
+      <div className="flex-1 p-8">
+        <div className="flex gap-4 mb-8">
+          <Button 
+            onClick={handleNewCode}
+            className="bg-green-600 hover:bg-green-700"
+          >
+            New
+          </Button>
+          <Button 
+            onClick={() => setShowRundown(!showRundown)}
+            className="bg-purple-600 hover:bg-purple-700"
+          >
+            {showRundown ? 'Hide Rundown' : 'Show Rundown'}
+          </Button>
+        </div>
 
-              <Droppable droppableId="codes">
-                {(provided) => (
-                  <div 
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    className="grid grid-cols-3 gap-4"
-                  >
-                    {savedCodes.map((code, index) => (
-                      <Draggable key={code.id} draggableId={code.id} index={index}>
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="codes">
+            {(provided) => (
+              <div 
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="grid grid-cols-3 gap-4"
+              >
+                {savedCodes.map((code, index) => (
+                  <Draggable key={code.id} draggableId={code.id} index={index}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <div
+                          className="p-6 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
+                        >
+                          <motion.div
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
                           >
-                            <div
-                              className="p-6 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
-                            >
-                              <motion.div
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                              >
-                                <span className="text-sm font-medium tracking-wide text-white">
-                                  {code.name}
-                                </span>
-                              </motion.div>
-                            </div>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </div>
-          </ResizablePanel>
+                            <span className="text-sm font-medium tracking-wide text-white">
+                              {code.name}
+                            </span>
+                          </motion.div>
+                        </div>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
 
           {showRundown && (
-            <>
-              <ResizableHandle withHandle />
-              <ResizablePanel defaultSize={40}>
-                <div className="h-full bg-menu-darker/90 p-4">
-                  <h2 className="text-white text-xl font-bold mb-4">
+            <div className="fixed bottom-0 left-0 right-0 bg-menu-darker/90 p-4 border-t border-gray-700">
+              <div className="max-w-[95%] mx-auto">
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="text-white text-xl font-bold">
                     Rundown ({rundownItems.length}/{MAX_RUNDOWN_ITEMS})
                   </h2>
-                  <div className="h-[calc(100vh-8rem)] flex flex-col">
-                    <div className="flex-grow">
-                      <Droppable droppableId="rundown">
-                        {(provided) => (
-                          <div
-                            {...provided.droppableProps}
-                            ref={provided.innerRef}
-                            className="space-y-4 min-h-[200px]"
-                          >
-                            {rundownItems.map((item, index) => (
-                              <Draggable 
-                                key={item.rundownId} 
-                                draggableId={item.rundownId} 
-                                index={index}
-                              >
-                                {(provided) => (
-                                  <div
-                                    ref={provided.innerRef}
-                                    {...provided.draggableProps}
-                                    {...provided.dragHandleProps}
-                                    className="p-4 rounded-lg bg-menu-darker text-white cursor-move hover:bg-menu-highlight transition-colors"
-                                  >
-                                    <span className="inline-block w-8 h-8 mr-3 text-center leading-8 bg-purple-600 rounded-full">
-                                      {index + 1}
-                                    </span>
-                                    {item.name}
-                                  </div>
-                                )}
-                              </Draggable>
-                            ))}
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </div>
-                    <div className="h-96 mt-4">
-                      <iframe 
-                        src="/rundown-preview" 
-                        className="w-full h-full rounded-lg border border-gray-700"
-                        title="Rundown Preview"
-                      />
-                    </div>
-                  </div>
                 </div>
-              </ResizablePanel>
-            </>
+                <Droppable droppableId="rundown" direction="horizontal">
+                  {(provided) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className="flex gap-4 overflow-x-auto pb-4 min-h-[100px] items-center"
+                    >
+                      {rundownItems.map((item, index) => (
+                        <Draggable 
+                          key={item.rundownId} 
+                          draggableId={item.rundownId} 
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              className="flex-shrink-0 p-4 rounded-lg bg-menu-darker text-white cursor-move hover:bg-menu-highlight transition-colors w-[200px]"
+                            >
+                              <span className="inline-block w-8 h-8 mr-3 text-center leading-8 bg-purple-600 rounded-full">
+                                {index + 1}
+                              </span>
+                              {item.name}
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            </div>
           )}
-        </ResizablePanelGroup>
-      </DragDropContext>
+        </DragDropContext>
+      </div>
     </div>
   );
 };
