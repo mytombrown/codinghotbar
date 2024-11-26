@@ -4,6 +4,17 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useToast } from "@/components/ui/use-toast";
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { Trash2 } from "lucide-react";
 
 interface SavedCode {
   id: string;
@@ -26,6 +37,7 @@ const Codes = () => {
     return saved ? JSON.parse(saved) : [];
   });
   const [rundownItems, setRundownItems] = useState<RundownItem[]>([]);
+  const [codeToDelete, setCodeToDelete] = useState<SavedCode | null>(null);
 
   const handleNewCode = () => {
     navigate("/new-code");
@@ -33,6 +45,23 @@ const Codes = () => {
 
   const handleDoubleClick = (id: string) => {
     navigate(`/edit-code/${id}`);
+  };
+
+  const handleDeleteCode = (code: SavedCode) => {
+    setCodeToDelete(code);
+  };
+
+  const confirmDelete = () => {
+    if (codeToDelete) {
+      const updatedCodes = savedCodes.filter(code => code.id !== codeToDelete.id);
+      localStorage.setItem("saved-codes", JSON.stringify(updatedCodes));
+      setSavedCodes(updatedCodes);
+      setCodeToDelete(null);
+      toast({
+        title: "Code Deleted",
+        description: `"${codeToDelete.name}" has been deleted.`,
+      });
+    }
   };
 
   // Helper function to get the first source image from the code data
@@ -95,6 +124,23 @@ const Codes = () => {
           </Button>
         </div>
 
+        <AlertDialog open={!!codeToDelete} onOpenChange={() => setCodeToDelete(null)}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Delete Code</AlertDialogTitle>
+              <AlertDialogDescription>
+                Are you sure you want to delete "{codeToDelete?.name}"? This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
+                Delete
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+
         <DragDropContext onDragEnd={handleDragEnd}>
           <Droppable droppableId="codes">
             {(provided) => (
@@ -117,6 +163,19 @@ const Codes = () => {
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
+                          <div className="flex justify-end mb-2">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteCode(code);
+                              }}
+                              className="hover:bg-red-500/20 hover:text-red-500"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
                           <div className="w-24 h-16 mx-auto mb-2 rounded-md overflow-hidden">
                             <img
                               src={getCodeThumbnail(code.data)}
