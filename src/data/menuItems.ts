@@ -23,37 +23,33 @@ export const menuItems: MenuItem[] = [
   },
 ];
 
+const audioSources = [
+  { id: 'mic1', label: 'MIC 1' },
+  { id: 'mic2', label: 'MIC 2' },
+  { id: 'mic3', label: 'MIC 3' },
+  { id: 'mic4', label: 'MIC 4' },
+  { id: 'line1', label: 'LINE 1' },
+  { id: 'line2', label: 'LINE 2' },
+  { id: 'aux1', label: 'AUX 1' },
+  { id: 'aux2', label: 'AUX 2' },
+  { id: 'ddr1', label: 'DDR 1' },
+  { id: 'ddr2', label: 'DDR 2' },
+  { id: 'gfx1', label: 'GFX 1' }
+];
+
 export const sideMenuItems: SideMenuItem[] = [
   { 
     id: 'source', 
     label: 'SOURCE',
-    items: [
-      { id: 'mic1', label: 'MIC 1' },
-      { id: 'mic2', label: 'MIC 2' },
-      { id: 'mic3', label: 'MIC 3' },
-      { id: 'mic4', label: 'MIC 4' },
-      { id: 'line1', label: 'LINE 1' },
-      { id: 'line2', label: 'LINE 2' },
-      { id: 'aux1', label: 'AUX 1' },
-      { id: 'aux2', label: 'AUX 2' },
-      { id: 'ddr1', label: 'DDR 1' },
-      { id: 'ddr2', label: 'DDR 2' },
-      { id: 'gfx1', label: 'GFX 1' }
-    ]
+    items: audioSources
   },
   { 
     id: 'audio', 
     label: 'AUDIO',
-    items: [
-      { id: 'mic1', label: 'MIC 1', hasLR: true },
-      { id: 'mic2', label: 'MIC 2', hasLR: true },
-      { id: 'mic3', label: 'MIC 3', hasLR: true },
-      { id: 'mic4', label: 'MIC 4', hasLR: true },
-      { id: 'line1', label: 'LINE 1', hasLR: true },
-      { id: 'line2', label: 'LINE 2', hasLR: true },
-      { id: 'aux1', label: 'AUX 1', hasLR: true },
-      { id: 'aux2', label: 'AUX 2', hasLR: true }
-    ]
+    items: audioSources.filter(source => !source.id.includes('ddr') && !source.id.includes('gfx')).map(source => ({
+      ...source,
+      hasLR: true
+    }))
   },
   { id: 'ptz', label: 'PTZ' },
   { id: 'grfx', label: 'GRFX' },
