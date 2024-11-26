@@ -1,118 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { useToast } from "@/components/ui/use-toast";
-import { MenuItem, SideMenuItem, LowerThirdData } from '../types/menu';
 import SideMenu from './SideMenu';
 import GridItems from './GridItems';
-
-const menuItems: MenuItem[] = [
-  {
-    id: 'transition',
-    label: 'Transition',
-    items: ['MIX', 'SLOW MIX', 'CUT', 'WIPE OUT', 'STINGER', 'END CAP', 'BREAKING NEWS', 'TOP STORIES', 'SPORTS BUMP'],
-  },
-  {
-    id: 'scte',
-    label: 'SCTE',
-    items: ['START SHOW', 'END SHOW', '2:00 BREAK', '2:30 BREAK', 'REPEAT', '3:00 BREAK', '1:30 BREAK', '1:00 BREAK', ':30 BREAK'],
-  },
-  {
-    id: 'auto-advance',
-    label: 'Auto-Advance',
-    items: ['MANUAL', 'ADVANCE', 'PAUSE'],
-  },
-  {
-    id: 'grfx',
-    label: 'GRFX',
-    items: ['Singular'],
-  },
-];
-
-const sideMenuItems: SideMenuItem[] = [
-  { 
-    id: 'source', 
-    label: 'SOURCE',
-    items: [
-      { id: 'cam1', label: 'CAM 1' },
-      { id: 'cam2', label: 'CAM 2' },
-      { id: 'cam3', label: 'CAM 3' },
-      { id: 'cam4', label: 'CAM 4' },
-      { id: 'cam5', label: 'CAM 5' },
-      { id: 'cam6', label: 'CAM 6' },
-      { id: 'ddr1', label: 'DDR 1' },
-      { id: 'ddr2', label: 'DDR 2' },
-      { id: 'gfx1', label: 'GFX 1' }
-    ]
-  },
-  { 
-    id: 'audio', 
-    label: 'AUDIO',
-    items: [
-      { id: 'mic1', label: 'MIC 1', hasLR: true },
-      { id: 'mic2', label: 'MIC 2', hasLR: true },
-      { id: 'mic3', label: 'MIC 3', hasLR: true },
-      { id: 'mic4', label: 'MIC 4', hasLR: true },
-      { id: 'line1', label: 'LINE 1', hasLR: true },
-      { id: 'line2', label: 'LINE 2', hasLR: true },
-      { id: 'aux1', label: 'AUX 1', hasLR: true },
-      { id: 'aux2', label: 'AUX 2', hasLR: true }
-    ]
-  },
-  { id: 'ptz', label: 'PTZ' },
-  { id: 'grfx', label: 'GRFX' },
-  { 
-    id: 'clips', 
-    label: 'CLIPS',
-    items: [
-      { 
-        id: 'clip1', 
-        label: 'Big Buck Bunny',
-        previewImage: '/placeholder.svg',
-        duration: '00:30:00',
-        lowerThirds: []
-      },
-      { 
-        id: 'clip2', 
-        label: 'Nature Documentary',
-        previewImage: '/photo-1649972904349-6e44c42644a7',
-        duration: '01:05:29',
-        lowerThirds: []
-      },
-      { 
-        id: 'clip3', 
-        label: 'Tech Review',
-        previewImage: '/photo-1488590528505-98d2b5aba04b',
-        duration: '00:31:04',
-        lowerThirds: []
-      }
-    ]
-  },
-  { id: 'me', label: 'ME' },
-  { id: 'l3', label: 'L3' },
-  { id: 'ext-dev', label: 'EXT DEV' },
-  { 
-    id: 'music', 
-    label: 'MUSIC',
-    items: Array.from({ length: 10 }, (_, i) => ({
-      id: `track${i + 1}`,
-      label: `Track ${i + 1}`,
-      hasLevel: true
-    }))
-  }
-];
+import { useMenuState } from '../hooks/useMenuState';
+import { menuItems, sideMenuItems } from '../data/menuItems';
 
 const MenuSystem = () => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
   const { id } = useParams();
-  const [activeCategory, setActiveCategory] = useState<string>('transition');
-  const [selectedItems, setSelectedItems] = useState<Record<string, string[]>>({});
-  const [selectedSideItem, setSelectedSideItem] = useState<string | null>(null);
-  const [showSideItems, setShowSideItems] = useState(false);
-  const [musicLevels, setMusicLevels] = useState<Record<string, string>>({});
-  const [clips, setClips] = useState(sideMenuItems.find(item => item.id === 'clips')?.items || []);
+  const {
+    activeCategory,
+    selectedItems,
+    selectedSideItem,
+    showSideItems,
+    musicLevels,
+    clips,
+    handleSave,
+    handleAddLowerThird,
+    handleLowerThirdTextChange,
+    handleItemSelect,
+    handleMusicLevelChange,
+    handleSideItemClick,
+    handleTopMenuClick,
+  } = useMenuState(id);
 
   useEffect(() => {
     if (id) {
@@ -123,109 +34,6 @@ const MenuSystem = () => {
       }
     }
   }, [id]);
-
-  const handleSave = () => {
-    const name = prompt("Enter a name for this code:");
-    if (!name) return;
-
-    const savedCodes = JSON.parse(localStorage.getItem("saved-codes") || "[]");
-    const newCode = {
-      id: id || Date.now().toString(),
-      name,
-      data: selectedItems,
-    };
-
-    if (id) {
-      const index = savedCodes.findIndex((c: any) => c.id === id);
-      if (index !== -1) {
-        savedCodes[index] = newCode;
-      }
-    } else {
-      savedCodes.push(newCode);
-    }
-
-    localStorage.setItem("saved-codes", JSON.stringify(savedCodes));
-    toast({
-      title: "Success",
-      description: "Code saved successfully",
-    });
-    navigate("/codes");
-  };
-
-  const handleAddLowerThird = (clipId: string, type: LowerThirdData['type']) => {
-    setClips(prevClips => 
-      prevClips.map(clip => 
-        clip.id === clipId 
-          ? { 
-              ...clip, 
-              lowerThirds: [
-                ...(clip.lowerThirds || []),
-                { type, text: '' }
-              ]
-            }
-          : clip
-      )
-    );
-  };
-
-  const handleLowerThirdTextChange = (clipId: string, index: number, text: string) => {
-    setClips(prevClips =>
-      prevClips.map(clip =>
-        clip.id === clipId
-          ? {
-              ...clip,
-              lowerThirds: clip.lowerThirds?.map((lt, i) =>
-                i === index ? { ...lt, text } : lt
-              ) || []
-            }
-          : clip
-      )
-    );
-  };
-
-  const handleItemSelect = (categoryId: string, item: string, side?: 'L' | 'R') => {
-    const itemLabel = side ? `${item} ${side}` : item;
-    
-    setSelectedItems(prev => {
-      // For audio items, allow multiple selections
-      if (categoryId === 'audio' || categoryId === 'music') {
-        const currentItems = prev[categoryId] || [];
-        const itemExists = currentItems.includes(itemLabel);
-        
-        return {
-          ...prev,
-          [categoryId]: itemExists
-            ? currentItems.filter(i => i !== itemLabel)
-            : [...currentItems, itemLabel]
-        };
-      }
-      
-      // For other categories, keep single selection behavior
-      return {
-        ...prev,
-        [categoryId]: [itemLabel]
-      };
-    });
-  };
-
-  const handleMusicLevelChange = (trackId: string, level: string) => {
-    setMusicLevels(prev => ({
-      ...prev,
-      [trackId]: level
-    }));
-  };
-
-  const handleSideItemClick = (itemId: string) => {
-    setSelectedSideItem(itemId);
-    setShowSideItems(true);
-    setActiveCategory('');
-  };
-
-  const handleTopMenuClick = (categoryId: string) => {
-    setActiveCategory(categoryId);
-    setShowSideItems(false);
-    setSelectedSideItem(null);
-  };
 
   return (
     <div className="min-h-screen bg-menu-dark p-8 flex">
