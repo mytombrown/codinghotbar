@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from '../ui/button';
 import { Input } from '../ui/input';
 import { Folder, ChevronRight, ChevronDown, Upload, Video } from 'lucide-react';
 import VideoPlayer from '../VideoPlayer/VideoPlayer';
 import { cn } from '@/lib/utils';
+import { useToast } from "@/components/ui/use-toast";
 
 interface Clip {
   id: string;
@@ -22,11 +23,13 @@ interface ClipFolder {
 }
 
 const ClipManager = () => {
+  const { toast } = useToast();
   const [selectedClip, setSelectedClip] = useState<Clip | null>(null);
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set(['KEEP']));
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Example folder structure
-  const [folders] = useState<ClipFolder[]>([
+  const [folders, setFolders] = useState<ClipFolder[]>([
     {
       id: 'archive',
       name: 'ARCHIVE',
@@ -70,6 +73,41 @@ const ClipManager = () => {
       }
       return next;
     });
+  };
+
+  const handleUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Create a new clip object
+      const newClip: Clip = {
+        id: Date.now().toString(),
+        name: file.name,
+        path: URL.createObjectURL(file),
+        duration: '00:00:00' // You would need to calculate this
+      };
+
+      // Add to INBOUND folder
+      setFolders(prevFolders => {
+        return prevFolders.map(folder => {
+          if (folder.id === 'inbound') {
+            return {
+              ...folder,
+              clips: [...folder.clips, newClip]
+            };
+          }
+          return folder;
+        });
+      });
+
+      toast({
+        title: "Upload Successful",
+        description: `${file.name} has been uploaded to the INBOUND folder.`,
+      });
+    }
   };
 
   const handleMarkIn = (time: number) => {
@@ -132,7 +170,14 @@ const ClipManager = () => {
       <div className="w-80 bg-menu-darker rounded-lg p-4">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-white font-bold">Media</h2>
-          <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            accept="video/*"
+            className="hidden"
+          />
+          <Button size="sm" onClick={handleUpload} className="bg-purple-600 hover:bg-purple-700">
             <Upload className="h-4 w-4 mr-2" />
             Upload
           </Button>

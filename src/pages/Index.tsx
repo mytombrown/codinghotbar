@@ -12,7 +12,6 @@ const Index = () => {
     <TooltipProvider>
       <div className="min-h-screen bg-menu-dark">
         <div className="flex">
-          {/* SideMenu will be rendered by MenuSystem */}
           <MenuSystem />
           {showClipManager && (
             <div className="flex-1 p-8">
