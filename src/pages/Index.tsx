@@ -10,7 +10,9 @@ const Index = () => {
 
   return (
     <TooltipProvider>
-      {showClipManager ? <ClipManager /> : <MenuSystem />}
+      <div className="min-h-screen bg-menu-dark">
+        {showClipManager ? <ClipManager /> : <MenuSystem />}
+      </div>
     </TooltipProvider>
   );
 };
