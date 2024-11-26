@@ -24,17 +24,17 @@ export const menuItems: MenuItem[] = [
 ];
 
 const audioSources = [
-  { id: 'mic1', label: 'MIC 1' },
-  { id: 'mic2', label: 'MIC 2' },
-  { id: 'mic3', label: 'MIC 3' },
-  { id: 'mic4', label: 'MIC 4' },
-  { id: 'line1', label: 'LINE 1' },
-  { id: 'line2', label: 'LINE 2' },
-  { id: 'aux1', label: 'AUX 1' },
-  { id: 'aux2', label: 'AUX 2' },
-  { id: 'ddr1', label: 'DDR 1' },
-  { id: 'ddr2', label: 'DDR 2' },
-  { id: 'gfx1', label: 'GFX 1' }
+  { id: 'cam1', label: 'CAM 1' },
+  { id: 'cam2', label: 'CAM 2' },
+  { id: 'cam3', label: 'CAM 3' },
+  { id: 'live1', label: 'LIVE 1' },
+  { id: 'live2', label: 'LIVE 2' },
+  { id: 'live3', label: 'LIVE 3' },
+  { id: 'cp1', label: 'CP1' },
+  { id: 'cp2', label: 'CP2' },
+  { id: 'me1', label: 'ME1' },
+  { id: 'me2', label: 'ME2' },
+  { id: 'me3', label: 'ME3' }
 ];
 
 export const sideMenuItems: SideMenuItem[] = [
@@ -46,7 +46,7 @@ export const sideMenuItems: SideMenuItem[] = [
   { 
     id: 'audio', 
     label: 'AUDIO',
-    items: audioSources.filter(source => !source.id.includes('ddr') && !source.id.includes('gfx')).map(source => ({
+    items: audioSources.map(source => ({
       ...source,
       hasLR: true
     }))
