@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Trash2 } from "lucide-react";
+import { sideMenuItems } from "../data/menuItems";
 
 interface SavedCode {
   id: string;
@@ -64,13 +65,13 @@ const Codes = () => {
     }
   };
 
-  // Helper function to get the first source image from the code data
   const getCodeThumbnail = (data: Record<string, string[]>) => {
     if (data.source && data.source.length > 0) {
       const sourceLabel = data.source[0];
-      const audioSources = JSON.parse(localStorage.getItem("audio-sources") || "[]");
-      const source = audioSources.find((s: any) => s.label === sourceLabel);
-      return source?.previewImage || '/placeholder.svg';
+      const sourceItem = sideMenuItems
+        .find(item => item.id === 'source')
+        ?.items?.find(source => source.label === sourceLabel);
+      return sourceItem?.previewImage || '/placeholder.svg';
     }
     return '/placeholder.svg';
   };
@@ -130,7 +131,7 @@ const Codes = () => {
               <AlertDialogTitle>Delete Code</AlertDialogTitle>
               <AlertDialogDescription>
                 Are you sure you want to delete "{codeToDelete?.name}"? This action cannot be undone.
-              </AlertDialogDescription>
+              </DialogDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
