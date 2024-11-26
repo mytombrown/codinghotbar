@@ -64,6 +64,33 @@ const GridItems = ({
     const selectedMenu = sideMenuItems.find(item => item.id === selectedSideItem);
     if (!selectedMenu?.items) return null;
 
+    if (selectedSideItem === 'source') {
+      return selectedMenu.items.map((item) => (
+        <motion.button
+          key={item.id}
+          onClick={() => onItemSelect(selectedSideItem, item.label)}
+          className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+            selectedItems[selectedSideItem]?.includes(item.label)
+              ? 'bg-menu-active text-white shadow-lg'
+              : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+          }`}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          {item.previewImage && (
+            <div className="aspect-video relative mb-2 rounded-md overflow-hidden">
+              <img
+                src={item.previewImage}
+                alt={item.label}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+          <span className="text-sm font-medium tracking-wide">{item.label}</span>
+        </motion.button>
+      ));
+    }
+
     if (selectedSideItem === 'clips') {
       return selectedMenu.items.map((item) => (
         <motion.div

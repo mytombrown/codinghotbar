@@ -24,17 +24,17 @@ export const menuItems: MenuItem[] = [
 ];
 
 const audioSources = [
-  { id: 'cam1', label: 'CAM 1' },
-  { id: 'cam2', label: 'CAM 2' },
-  { id: 'cam3', label: 'CAM 3' },
-  { id: 'live1', label: 'LIVE 1' },
-  { id: 'live2', label: 'LIVE 2' },
-  { id: 'live3', label: 'LIVE 3' },
-  { id: 'cp1', label: 'CP1' },
-  { id: 'cp2', label: 'CP2' },
-  { id: 'me1', label: 'ME1' },
-  { id: 'me2', label: 'ME2' },
-  { id: 'me3', label: 'ME3' }
+  { id: 'cam1', label: 'CAM 1', previewImage: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81' },
+  { id: 'cam2', label: 'CAM 2', previewImage: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d' },
+  { id: 'cam3', label: 'CAM 3', previewImage: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085' },
+  { id: 'live1', label: 'LIVE 1', previewImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c' },
+  { id: 'live2', label: 'LIVE 2', previewImage: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b' },
+  { id: 'live3', label: 'LIVE 3', previewImage: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6' },
+  { id: 'cp1', label: 'CP1', previewImage: 'https://images.unsplash.com/photo-1649972904349-6e44c42644a7' },
+  { id: 'cp2', label: 'CP2', previewImage: 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81' },
+  { id: 'me1', label: 'ME1', previewImage: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d' },
+  { id: 'me2', label: 'ME2', previewImage: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085' },
+  { id: 'me3', label: 'ME3', previewImage: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c' }
 ];
 
 export const sideMenuItems: SideMenuItem[] = [
