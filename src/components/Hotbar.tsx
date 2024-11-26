@@ -1,6 +1,11 @@
 import { motion } from 'framer-motion';
 import { Droppable, Draggable } from '@hello-pangea/dnd';
 import { getCodeThumbnail } from '../utils/thumbnailUtils';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 interface HotbarProps {
   items: any[];
@@ -32,24 +37,45 @@ const Hotbar = ({ items, showHotbar }: HotbarProps) => {
                   index={index}
                 >
                   {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      className="flex-shrink-0 p-4 rounded-lg bg-menu-darker text-white cursor-move hover:bg-menu-highlight transition-colors w-[200px]"
-                    >
-                      <div className="w-16 h-12 mx-auto mb-2 rounded-md overflow-hidden">
-                        <img
-                          src={getCodeThumbnail(item.data)}
-                          alt={item.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <span className="inline-block w-8 h-8 mr-3 text-center leading-8 bg-purple-600 rounded-full">
-                        {index + 1}
-                      </span>
-                      {item.name}
-                    </div>
+                    <HoverCard>
+                      <HoverCardTrigger asChild>
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          className="flex-shrink-0 p-4 rounded-lg bg-menu-darker text-white cursor-move hover:bg-menu-highlight transition-colors w-[200px]"
+                        >
+                          <div className="w-16 h-12 mx-auto mb-2 rounded-md overflow-hidden">
+                            <img
+                              src={getCodeThumbnail(item.data)}
+                              alt={item.name}
+                              className="w-full h-full object-cover"
+                            />
+                          </div>
+                          <span className="inline-block w-8 h-8 mr-3 text-center leading-8 bg-purple-600 rounded-full">
+                            {index + 1}
+                          </span>
+                          {item.name}
+                        </div>
+                      </HoverCardTrigger>
+                      <HoverCardContent className="w-80">
+                        <div className="space-y-2">
+                          <h4 className="text-sm font-semibold">{item.name}</h4>
+                          <div className="text-sm">
+                            {Object.entries(item.data).map(([category, items]) => (
+                              Array.isArray(items) && items.length > 0 && (
+                                <div key={category} className="mb-2">
+                                  <div className="font-medium capitalize">{category}:</div>
+                                  <div className="text-muted-foreground">
+                                    {items.join(', ')}
+                                  </div>
+                                </div>
+                              )
+                            ))}
+                          </div>
+                        </div>
+                      </HoverCardContent>
+                    </HoverCard>
                   )}
                 </Draggable>
               ))}
