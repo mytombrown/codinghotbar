@@ -18,7 +18,7 @@ const Hotbar = ({ items, showHotbar }: HotbarProps) => {
             Hotbar ({items.length}/20)
           </h2>
         </div>
-        <Droppable droppableId="rundown" direction="horizontal">
+        <Droppable droppableId="hotbar" direction="horizontal">
           {(provided) => (
             <div
               {...provided.droppableProps}

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useToast } from "@/components/ui/use-toast";
-import { DragDropContext } from '@hello-pangea/dnd';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -69,7 +69,7 @@ const Codes = () => {
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
 
-    if (result.source.droppableId === 'codes' && result.destination.droppableId === 'rundown') {
+    if (result.source.droppableId === 'codes' && result.destination.droppableId === 'hotbar') {
       if (hotbarItems.length >= MAX_HOTBAR_ITEMS) {
         toast({
           title: "Hotbar Full",
@@ -89,7 +89,7 @@ const Codes = () => {
       }
     }
 
-    if (result.source.droppableId === 'rundown' && result.destination.droppableId === 'rundown') {
+    if (result.source.droppableId === 'hotbar' && result.destination.droppableId === 'hotbar') {
       const items = Array.from(hotbarItems);
       const [reorderedItem] = items.splice(result.source.index, 1);
       items.splice(result.destination.index, 0, reorderedItem);
@@ -98,81 +98,96 @@ const Codes = () => {
   };
 
   return (
-    <div className="min-h-screen bg-menu-dark flex flex-col">
-      <div className="flex-1 p-8">
-        <div className="flex gap-4 mb-8">
-          <Button 
-            onClick={handleNewCode}
-            className="bg-green-600 hover:bg-green-700"
-          >
-            New
-          </Button>
-          <Button 
-            onClick={() => setShowHotbar(!showHotbar)}
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            {showHotbar ? 'Hide Hotbar' : 'Show Hotbar'}
-          </Button>
-        </div>
-
-        <AlertDialog open={!!codeToDelete} onOpenChange={() => setCodeToDelete(null)}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete Code</AlertDialogTitle>
-              <AlertDialogDescription>
-                Are you sure you want to delete "{codeToDelete?.name}"? This action cannot be undone.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
-                Delete
-              </AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
-
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <div className="grid grid-cols-3 gap-4">
-            {savedCodes.map((code, index) => (
-              <motion.div
-                key={code.id}
-                onDoubleClick={() => handleDoubleClick(code.id)}
-                className="p-4 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div className="flex justify-end mb-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleDeleteCode(code);
-                    }}
-                    className="hover:bg-red-500/20 hover:text-red-500"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-                <div className="w-16 h-12 mx-auto mb-2 rounded-md overflow-hidden">
-                  <img
-                    src={getCodeThumbnail(code.data)}
-                    alt={code.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <span className="text-sm font-medium tracking-wide text-white block text-center">
-                  {code.name}
-                </span>
-              </motion.div>
-            ))}
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <div className="min-h-screen bg-menu-dark flex flex-col">
+        <div className="flex-1 p-8">
+          <div className="flex gap-4 mb-8">
+            <Button 
+              onClick={handleNewCode}
+              className="bg-green-600 hover:bg-green-700"
+            >
+              New
+            </Button>
+            <Button 
+              onClick={() => setShowHotbar(!showHotbar)}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              {showHotbar ? 'Hide Hotbar' : 'Show Hotbar'}
+            </Button>
           </div>
 
+          <AlertDialog open={!!codeToDelete} onOpenChange={() => setCodeToDelete(null)}>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Delete Code</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to delete "{codeToDelete?.name}"? This action cannot be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
+                  Delete
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+
+          <Droppable droppableId="codes" direction="horizontal">
+            {(provided) => (
+              <div 
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                className="grid grid-cols-3 gap-4"
+              >
+                {savedCodes.map((code, index) => (
+                  <Draggable key={code.id} draggableId={code.id} index={index}>
+                    {(provided) => (
+                      <motion.div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        onDoubleClick={() => handleDoubleClick(code.id)}
+                        className="p-4 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        <div className="flex justify-end mb-2">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteCode(code);
+                            }}
+                            className="hover:bg-red-500/20 hover:text-red-500"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <div className="w-16 h-12 mx-auto mb-2 rounded-md overflow-hidden">
+                          <img
+                            src={getCodeThumbnail(code.data)}
+                            alt={code.name}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <span className="text-sm font-medium tracking-wide text-white block text-center">
+                          {code.name}
+                        </span>
+                      </motion.div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+
           <Hotbar items={hotbarItems} showHotbar={showHotbar} />
-        </DragDropContext>
+        </div>
       </div>
-    </div>
+    </DragDropContext>
   );
 };
 
