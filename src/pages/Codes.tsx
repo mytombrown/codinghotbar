@@ -138,7 +138,7 @@ const Codes = () => {
               <div 
                 {...provided.droppableProps}
                 ref={provided.innerRef}
-                className="grid grid-cols-3 gap-4"
+                className="grid grid-cols-4 gap-3"
               >
                 {savedCodes.map((code, index) => (
                   <Draggable key={code.id} draggableId={code.id} index={index}>
@@ -150,11 +150,11 @@ const Codes = () => {
                       >
                         <motion.div
                           onDoubleClick={() => handleDoubleClick(code.id)}
-                          className="p-4 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
+                          className="aspect-square p-3 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
-                          <div className="flex justify-end mb-2">
+                          <div className="flex justify-end">
                             <Button
                               variant="ghost"
                               size="icon"
@@ -167,14 +167,14 @@ const Codes = () => {
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           </div>
-                          <div className="w-16 h-12 mx-auto mb-2 rounded-md overflow-hidden">
+                          <div className="w-16 h-16 mx-auto mb-2 rounded-md overflow-hidden">
                             <img
                               src={getCodeThumbnail(code.data)}
                               alt={code.name}
                               className="w-full h-full object-cover"
                             />
                           </div>
-                          <span className="text-sm font-medium tracking-wide text-white block text-center">
+                          <span className="text-sm font-medium tracking-wide text-white block text-center truncate">
                             {code.name}
                           </span>
                         </motion.div>
