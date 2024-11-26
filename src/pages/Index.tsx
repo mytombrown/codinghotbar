@@ -11,10 +11,10 @@ const Index = () => {
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-menu-dark">
-        <div className="flex">
+        <div className="flex flex-col">
           <MenuSystem />
           {showClipManager && (
-            <div className="flex-1 p-8">
+            <div className="p-8">
               <ClipManager />
             </div>
           )}
