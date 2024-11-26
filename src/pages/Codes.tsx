@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useToast } from "@/components/ui/use-toast";
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import { DragDropContext } from '@hello-pangea/dnd';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -15,7 +15,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Trash2 } from "lucide-react";
-import { sideMenuItems } from "../data/menuItems";
+import { getCodeThumbnail } from "../utils/thumbnailUtils";
+import Hotbar from "../components/Hotbar";
 
 interface SavedCode {
   id: string;
@@ -23,21 +24,21 @@ interface SavedCode {
   data: Record<string, string[]>;
 }
 
-interface RundownItem extends SavedCode {
+interface HotbarItem extends SavedCode {
   rundownId: string;
 }
 
-const MAX_RUNDOWN_ITEMS = 20;
+const MAX_HOTBAR_ITEMS = 20;
 
 const Codes = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [showRundown, setShowRundown] = useState(true);
+  const [showHotbar, setShowHotbar] = useState(true);
   const [savedCodes, setSavedCodes] = useState<SavedCode[]>(() => {
     const saved = localStorage.getItem("saved-codes");
     return saved ? JSON.parse(saved) : [];
   });
-  const [rundownItems, setRundownItems] = useState<RundownItem[]>([]);
+  const [hotbarItems, setHotbarItems] = useState<HotbarItem[]>([]);
   const [codeToDelete, setCodeToDelete] = useState<SavedCode | null>(null);
 
   const handleNewCode = () => {
@@ -65,25 +66,14 @@ const Codes = () => {
     }
   };
 
-  const getCodeThumbnail = (data: Record<string, string[]>) => {
-    if (data.source && data.source.length > 0) {
-      const sourceLabel = data.source[0];
-      const sourceItem = sideMenuItems
-        .find(item => item.id === 'source')
-        ?.items?.find(source => source.label === sourceLabel);
-      return sourceItem?.previewImage || '/placeholder.svg';
-    }
-    return '/placeholder.svg';
-  };
-
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
 
     if (result.source.droppableId === 'codes' && result.destination.droppableId === 'rundown') {
-      if (rundownItems.length >= MAX_RUNDOWN_ITEMS) {
+      if (hotbarItems.length >= MAX_HOTBAR_ITEMS) {
         toast({
-          title: "Rundown Full",
-          description: `Cannot add more than ${MAX_RUNDOWN_ITEMS} items to the rundown.`,
+          title: "Hotbar Full",
+          description: `Cannot add more than ${MAX_HOTBAR_ITEMS} items to the hotbar.`,
           variant: "destructive",
         });
         return;
@@ -91,19 +81,19 @@ const Codes = () => {
 
       const code = savedCodes.find(code => code.id === result.draggableId);
       if (code) {
-        const newRundownItem: RundownItem = {
+        const newHotbarItem: HotbarItem = {
           ...code,
           rundownId: `${Date.now()}-${Math.random()}`
         };
-        setRundownItems(prev => [...prev, newRundownItem]);
+        setHotbarItems(prev => [...prev, newHotbarItem]);
       }
     }
 
     if (result.source.droppableId === 'rundown' && result.destination.droppableId === 'rundown') {
-      const items = Array.from(rundownItems);
+      const items = Array.from(hotbarItems);
       const [reorderedItem] = items.splice(result.source.index, 1);
       items.splice(result.destination.index, 0, reorderedItem);
-      setRundownItems(items);
+      setHotbarItems(items);
     }
   };
 
@@ -118,10 +108,10 @@ const Codes = () => {
             New
           </Button>
           <Button 
-            onClick={() => setShowRundown(!showRundown)}
+            onClick={() => setShowHotbar(!showHotbar)}
             className="bg-purple-600 hover:bg-purple-700"
           >
-            {showRundown ? 'Hide Rundown' : 'Show Rundown'}
+            {showHotbar ? 'Hide Hotbar' : 'Show Hotbar'}
           </Button>
         </div>
 
@@ -143,103 +133,43 @@ const Codes = () => {
         </AlertDialog>
 
         <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="codes">
-            {(provided) => (
-              <div 
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="grid grid-cols-3 gap-4"
+          <div className="grid grid-cols-3 gap-4">
+            {savedCodes.map((code, index) => (
+              <motion.div
+                key={code.id}
+                onDoubleClick={() => handleDoubleClick(code.id)}
+                className="p-4 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
               >
-                {savedCodes.map((code, index) => (
-                  <Draggable key={code.id} draggableId={code.id} index={index}>
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <motion.div
-                          onDoubleClick={() => handleDoubleClick(code.id)}
-                          className="p-4 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                        >
-                          <div className="flex justify-end mb-2">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleDeleteCode(code);
-                              }}
-                              className="hover:bg-red-500/20 hover:text-red-500"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                          <div className="w-24 h-16 mx-auto mb-2 rounded-md overflow-hidden">
-                            <img
-                              src={getCodeThumbnail(code.data)}
-                              alt={code.name}
-                              className="w-full h-full object-cover"
-                            />
-                          </div>
-                          <span className="text-sm font-medium tracking-wide text-white block text-center">
-                            {code.name}
-                          </span>
-                        </motion.div>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-
-          {showRundown && (
-            <div className="fixed bottom-0 left-0 right-0 bg-menu-darker/90 p-4 border-t border-gray-700">
-              <div className="max-w-[95%] mx-auto">
-                <div className="flex items-center justify-between mb-2">
-                  <h2 className="text-white text-xl font-bold">
-                    Rundown ({rundownItems.length}/{MAX_RUNDOWN_ITEMS})
-                  </h2>
+                <div className="flex justify-end mb-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteCode(code);
+                    }}
+                    className="hover:bg-red-500/20 hover:text-red-500"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </div>
-                <Droppable droppableId="rundown" direction="horizontal">
-                  {(provided) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      className="flex gap-4 overflow-x-auto pb-4 min-h-[100px] items-center"
-                    >
-                      {rundownItems.map((item, index) => (
-                        <Draggable 
-                          key={item.rundownId} 
-                          draggableId={item.rundownId} 
-                          index={index}
-                        >
-                          {(provided) => (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              className="flex-shrink-0 p-4 rounded-lg bg-menu-darker text-white cursor-move hover:bg-menu-highlight transition-colors w-[200px]"
-                            >
-                              <span className="inline-block w-8 h-8 mr-3 text-center leading-8 bg-purple-600 rounded-full">
-                                {index + 1}
-                              </span>
-                              {item.name}
-                            </div>
-                          )}
-                        </Draggable>
-                      ))}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </div>
-            </div>
-          )}
+                <div className="w-16 h-12 mx-auto mb-2 rounded-md overflow-hidden">
+                  <img
+                    src={getCodeThumbnail(code.data)}
+                    alt={code.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="text-sm font-medium tracking-wide text-white block text-center">
+                  {code.name}
+                </span>
+              </motion.div>
+            ))}
+          </div>
+
+          <Hotbar items={hotbarItems} showHotbar={showHotbar} />
         </DragDropContext>
       </div>
     </div>
