@@ -117,7 +117,7 @@ const Codes = () => {
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                         >
-                          <div className="aspect-video relative mb-2 rounded-md overflow-hidden">
+                          <div className="w-24 h-16 mx-auto mb-2 rounded-md overflow-hidden">
                             <img
                               src={getCodeThumbnail(code.data)}
                               alt={code.name}

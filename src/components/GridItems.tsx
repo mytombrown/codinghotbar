@@ -69,7 +69,7 @@ const GridItems = ({
         <motion.button
           key={item.id}
           onClick={() => onItemSelect(selectedSideItem, item.label)}
-          className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+          className={`p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
             selectedItems[selectedSideItem]?.includes(item.label)
               ? 'bg-menu-active text-white shadow-lg'
               : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
@@ -78,7 +78,7 @@ const GridItems = ({
           whileTap={{ scale: 0.98 }}
         >
           {item.previewImage && (
-            <div className="aspect-video relative mb-2 rounded-md overflow-hidden">
+            <div className="w-24 h-16 mx-auto mb-2 rounded-md overflow-hidden">
               <img
                 src={item.previewImage}
                 alt={item.label}
