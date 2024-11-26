@@ -20,6 +20,7 @@ const App = () => (
           <Route path="/codes" element={<Codes />} />
           <Route path="/new-code" element={<Index />} />
           <Route path="/edit-code/:id" element={<Index />} />
+          <Route path="/clips" element={<Index />} />
           <Route path="/rundown-preview" element={<RundownPreview />} />
         </Routes>
       </BrowserRouter>
