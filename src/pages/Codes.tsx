@@ -131,7 +131,7 @@ const Codes = () => {
               <AlertDialogTitle>Delete Code</AlertDialogTitle>
               <AlertDialogDescription>
                 Are you sure you want to delete "{codeToDelete?.name}"? This action cannot be undone.
-              </DialogDialogDescription>
+              </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
