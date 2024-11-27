@@ -87,14 +87,14 @@ export const sideMenuItems: SideMenuItem[] = [
       {
         id: 'me1',
         label: 'ME Box 1',
-        type: 'box',
+        type: '1:1 BOX',
         previewImage: null,
         selectedSource: null
       },
       {
         id: 'me2',
         label: 'ME Box 2',
-        type: 'box',
+        type: '1:1 BOX',
         previewImage: null,
         selectedSource: null
       }

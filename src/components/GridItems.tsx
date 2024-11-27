@@ -195,6 +195,10 @@ const GridItems = ({
                             className="absolute inset-0 w-full h-full object-cover"
                           />
                         )}
+                        <div className="absolute bottom-0 left-0 right-0 p-2 bg-black/70 text-white text-sm">
+                          <div>{item.selectedSource ? item.selectedSource.label : 'No Source'}</div>
+                          <div className="text-xs text-gray-400">{item.type}</div>
+                        </div>
                       </motion.button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
