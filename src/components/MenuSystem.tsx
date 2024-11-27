@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import SideMenu from './SideMenu';
 import GridItems from './GridItems';
+import TopMenuBar from './TopMenuBar';
 import { useMenuState } from '../hooks/useMenuState';
 import { menuItems, sideMenuItems } from '../data/menuItems';
 
@@ -140,40 +140,12 @@ const MenuSystem = () => {
           </DialogContent>
         </Dialog>
 
-        <div className="grid grid-cols-4 gap-4">
-          {menuItems.map((category) => (
-            <div key={category.id} className="space-y-2">
-              <motion.button
-                onClick={() => handleTopMenuClick(category.id)}
-                className={`w-full p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-                  activeCategory === category.id
-                    ? selectedItems[category.id]?.length > 0
-                      ? 'bg-green-800 text-white shadow-lg'
-                      : 'bg-menu-active text-white shadow-lg'
-                    : selectedItems[category.id]?.length > 0
-                    ? 'bg-green-600 text-white'
-                    : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-                }`}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <span className="text-sm font-medium tracking-wide">{category.label}</span>
-              </motion.button>
-              
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className={`h-10 rounded-lg p-2 flex items-center justify-center text-sm ${
-                  selectedItems[category.id]?.length > 0
-                    ? 'bg-menu-active text-white'
-                    : 'bg-menu-darker/40 text-transparent'
-                }`}
-              >
-                {selectedItems[category.id]?.join(', ') || '.'}
-              </motion.div>
-            </div>
-          ))}
-        </div>
+        <TopMenuBar
+          menuItems={menuItems}
+          activeCategory={activeCategory}
+          selectedItems={selectedItems}
+          onTopMenuClick={handleTopMenuClick}
+        />
 
         <motion.div
           className="grid grid-cols-3 gap-4 mt-6"
