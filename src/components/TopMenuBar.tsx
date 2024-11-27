@@ -21,7 +21,7 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
         <div key={category.id}>
           <motion.button
             onClick={() => onTopMenuClick(category.id)}
-            className={`w-full h-12 rounded-lg backdrop-blur-sm transition-all duration-300 flex items-center justify-center ${
+            className={`w-full h-12 rounded-lg backdrop-blur-sm transition-all duration-300 ${
               activeCategory === category.id
                 ? selectedItems[category.id]?.length > 0
                   ? 'bg-green-600 text-white shadow-lg'
