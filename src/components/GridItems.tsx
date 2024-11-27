@@ -181,19 +181,20 @@ const GridItems = ({
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <motion.button
-                      className={`w-full aspect-video bg-black rounded-lg overflow-hidden ${
-                        selectedItems[selectedSideItem]?.includes(item.label)
-                          ? 'ring-2 ring-menu-active'
-                          : ''
-                      }`}
+                      className={cn(
+                        "w-full relative",
+                        "before:content-[''] before:block before:pb-[56.25%]", // 16:9 aspect ratio
+                        "bg-black rounded-lg overflow-hidden",
+                        selectedItems[selectedSideItem]?.includes(item.label) && "ring-2 ring-menu-active"
+                      )}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
-                      {selectedItems[selectedSideItem]?.includes(item.label) && item.selectedSource && (
+                      {item.selectedSource && (
                         <img
                           src={item.selectedSource.previewImage}
                           alt={item.label}
-                          className="w-full h-full object-cover"
+                          className="absolute inset-0 w-full h-full object-cover"
                         />
                       )}
                     </motion.button>
@@ -213,8 +214,8 @@ const GridItems = ({
                         </DropdownMenuItem>
                       ))}
                   </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+                </DropdownMenu>
+              </div>
             ))}
           </div>
         </div>
