@@ -17,7 +17,7 @@ export const menuItems: MenuItem[] = [
     items: ['MANUAL', 'ADVANCE', 'PAUSE'],
   },
   {
-    id: 'grfx',
+    id: 'top-grfx',
     label: 'GRFX',
     items: ['Singular'],
   },
