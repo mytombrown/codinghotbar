@@ -17,7 +17,7 @@ export const menuItems: MenuItem[] = [
     items: ['MANUAL', 'ADVANCE', 'PAUSE'],
   },
   {
-    id: 'top-grfx',
+    id: 'grfx',
     label: 'GRFX',
     items: ['Singular'],
   },
@@ -87,14 +87,14 @@ export const sideMenuItems: SideMenuItem[] = [
       {
         id: 'me1',
         label: 'ME Box 1',
-        type: '1:1 BOX',
+        type: 'box',
         previewImage: null,
         selectedSource: null
       },
       {
         id: 'me2',
         label: 'ME Box 2',
-        type: '1:1 BOX',
+        type: 'box',
         previewImage: null,
         selectedSource: null
       }

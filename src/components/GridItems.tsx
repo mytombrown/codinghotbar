@@ -5,7 +5,6 @@ import { Plus, Link } from 'lucide-react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { cn } from "@/lib/utils";
-import MESection from './MESection';
 
 interface GridItemsProps {
   showSideItems: boolean;
@@ -14,7 +13,7 @@ interface GridItemsProps {
   menuItems: MenuItem[];
   activeCategory: string;
   selectedItems: Record<string, string[]>;
-  onItemSelect: (categoryId: string, item: string | any, side?: 'L' | 'R') => void;
+  onItemSelect: (categoryId: string, item: string, side?: 'L' | 'R') => void;
   musicLevels?: Record<string, string>;
   onMusicLevelChange?: (trackId: string, level: string) => void;
   onLowerThirdTextChange?: (clipId: string, index: number, text: string) => void;
@@ -35,20 +34,32 @@ const GridItems = ({
   onAddLowerThird,
 }: GridItemsProps) => {
 
+  const handleSourceSelect = (sourceId: string, item: any) => {
+    if (item.label === 'ME1') {
+      // Switch to ME section when ME1 is selected
+      onItemSelect('me', item.label);
+    } else {
+      onItemSelect(sourceId, item.label);
+    }
+  };
+
   const handleLinkClick = (item: string) => {
     const itemL = `${item} L`;
     const itemR = `${item} R`;
     const isLSelected = selectedItems[selectedSideItem!]?.includes(itemL);
     const isRSelected = selectedItems[selectedSideItem!]?.includes(itemR);
 
+    // If neither is selected, select both
     if (!isLSelected && !isRSelected) {
       onItemSelect(selectedSideItem!, item, 'L');
       onItemSelect(selectedSideItem!, item, 'R');
     }
+    // If both are selected, deselect both
     else if (isLSelected && isRSelected) {
       onItemSelect(selectedSideItem!, item, 'L');
       onItemSelect(selectedSideItem!, item, 'R');
     }
+    // If one is selected, select the other
     else {
       if (isLSelected) {
         onItemSelect(selectedSideItem!, item, 'R');
@@ -58,26 +69,6 @@ const GridItems = ({
     }
   };
 
-  if (!showSideItems) {
-    const activeItems = menuItems.find((category) => category.id === activeCategory)?.items || [];
-    
-    return activeItems.map((item) => (
-      <motion.button
-        key={item}
-        onClick={() => onItemSelect(activeCategory, item)}
-        className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 w-full text-center ${
-          selectedItems[activeCategory]?.includes(item)
-            ? 'bg-menu-active text-white shadow-lg'
-            : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-        }`}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <span className="text-sm font-medium tracking-wide block">{item}</span>
-      </motion.button>
-    ));
-  }
-
   if (showSideItems && selectedSideItem) {
     const selectedMenu = sideMenuItems.find(item => item.id === selectedSideItem);
     if (!selectedMenu?.items) return null;
@@ -86,7 +77,7 @@ const GridItems = ({
       return selectedMenu.items.map((item) => (
         <motion.button
           key={item.id}
-          onClick={() => onItemSelect(selectedSideItem, item)}
+          onClick={() => handleSourceSelect(selectedSideItem, item)}
           className={`p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
             selectedItems[selectedSideItem]?.includes(item.label)
               ? 'bg-menu-active text-white shadow-lg'
@@ -192,13 +183,53 @@ const GridItems = ({
 
     if (selectedSideItem === 'me') {
       return (
-        <MESection
-          selectedMenu={selectedMenu}
-          selectedSideItem={selectedSideItem}
-          selectedItems={selectedItems}
-          sideMenuItems={sideMenuItems}
-          onItemSelect={onItemSelect}
-        />
+        <div className="w-full relative">
+          <div className="before:content-[''] before:block before:pb-[56.25%]" /> {/* 16:9 container */}
+          <div className="absolute inset-0 p-4 bg-[#1e3a8a] rounded-lg">
+            <div className="grid grid-cols-2 gap-4 h-full">
+              {selectedMenu.items.map((item: any) => (
+                <div key={item.id} className="relative">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <motion.button
+                        className={cn(
+                          "w-full h-full relative",
+                          "bg-black rounded-lg overflow-hidden",
+                          selectedItems[selectedSideItem]?.includes(item.label) && "ring-2 ring-menu-active"
+                        )}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        {item.selectedSource && (
+                          <img
+                            src={item.selectedSource.previewImage}
+                            alt={item.label}
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                        )}
+                      </motion.button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {sideMenuItems
+                        .find(menu => menu.id === 'source')
+                        ?.items?.map((source: any) => (
+                          <DropdownMenuItem
+                            key={source.id}
+                            onClick={() => {
+                              item.selectedSource = source;
+                              onItemSelect(selectedSideItem, item.label);
+                            }}
+                          >
+                            {source.label}
+                          </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       );
     }
 
@@ -293,6 +324,22 @@ const GridItems = ({
       </motion.button>
     ));
   }
+
+  return menuItems.find((category) => category.id === activeCategory)?.items.map((item) => (
+    <motion.button
+      key={item}
+      onClick={() => onItemSelect(activeCategory, item)}
+      className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+        selectedItems[activeCategory]?.includes(item)
+          ? 'bg-menu-active text-white shadow-lg'
+          : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+      }`}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+    >
+      <span className="text-sm font-medium tracking-wide">{item}</span>
+    </motion.button>
+  ));
 };
 
 export default GridItems;
