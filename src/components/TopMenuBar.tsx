@@ -33,7 +33,7 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="relative z-10 block min-h-[1.5rem] text-sm font-medium tracking-wide">
+            <span className="relative z-10 block min-h-[1.5rem] text-sm font-medium tracking-wide whitespace-nowrap overflow-hidden text-ellipsis">
               {category.id !== 'blank1' && (
                 selectedItems[category.id]?.length > 0
                   ? selectedItems[category.id][0]
