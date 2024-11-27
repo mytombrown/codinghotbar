@@ -22,6 +22,7 @@ import {
 import { Trash2 } from "lucide-react";
 import { getCodeThumbnail } from "../utils/thumbnailUtils";
 import Hotbar from "../components/Hotbar";
+import MESourcesDisplay from "../components/MESourcesDisplay";
 
 interface SavedCode {
   id: string;
@@ -189,9 +190,10 @@ const Codes = () => {
                           <HoverCardContent className="w-80">
                             <div className="space-y-2">
                               <h4 className="text-sm font-semibold">{code.name}</h4>
+                              <MESourcesDisplay meData={code.data} />
                               <div className="text-sm">
                                 {Object.entries(code.data).map(([category, items]) => (
-                                  items.length > 0 && (
+                                  items.length > 0 && category !== 'me' && category !== 'source' && (
                                     <div key={category} className="mb-2">
                                       <div className="font-medium capitalize">{category}:</div>
                                       <div className="text-muted-foreground">
