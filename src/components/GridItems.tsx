@@ -174,49 +174,51 @@ const GridItems = ({
 
     if (selectedSideItem === 'me') {
       return (
-        <div className="w-full p-4 bg-[#1e3a8a] rounded-lg">
-          <div className="grid grid-cols-2 gap-4">
-            {selectedMenu.items.map((item: any) => (
-              <div key={item.id} className="relative">
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <motion.button
-                      className={cn(
-                        "w-full relative",
-                        "before:content-[''] before:block before:pb-[56.25%]", // 16:9 aspect ratio
-                        "bg-black rounded-lg overflow-hidden",
-                        selectedItems[selectedSideItem]?.includes(item.label) && "ring-2 ring-menu-active"
-                      )}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      {item.selectedSource && (
-                        <img
-                          src={item.selectedSource.previewImage}
-                          alt={item.label}
-                          className="absolute inset-0 w-full h-full object-cover"
-                        />
-                      )}
-                    </motion.button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                    {sideMenuItems
-                      .find(menu => menu.id === 'source')
-                      ?.items?.map((source: any) => (
-                        <DropdownMenuItem
-                          key={source.id}
-                          onClick={() => {
-                            item.selectedSource = source;
-                            onItemSelect(selectedSideItem, item.label);
-                          }}
-                        >
-                          {source.label}
-                        </DropdownMenuItem>
-                      ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            ))}
+        <div className="w-full relative">
+          <div className="before:content-[''] before:block before:pb-[56.25%]" /> {/* 16:9 container */}
+          <div className="absolute inset-0 p-4 bg-[#1e3a8a] rounded-lg">
+            <div className="grid grid-cols-2 gap-4 h-full">
+              {selectedMenu.items.map((item: any) => (
+                <div key={item.id} className="relative">
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <motion.button
+                        className={cn(
+                          "w-full h-full relative",
+                          "bg-black rounded-lg overflow-hidden",
+                          selectedItems[selectedSideItem]?.includes(item.label) && "ring-2 ring-menu-active"
+                        )}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        {item.selectedSource && (
+                          <img
+                            src={item.selectedSource.previewImage}
+                            alt={item.label}
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                        )}
+                      </motion.button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      {sideMenuItems
+                        .find(menu => menu.id === 'source')
+                        ?.items?.map((source: any) => (
+                          <DropdownMenuItem
+                            key={source.id}
+                            onClick={() => {
+                              item.selectedSource = source;
+                              onItemSelect(selectedSideItem, item.label);
+                            }}
+                          >
+                            {source.label}
+                          </DropdownMenuItem>
+                        ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       );
