@@ -19,7 +19,7 @@ const formatMEBoxSources = (data: Record<string, string[]>) => {
   if (!data.me || !Array.isArray(data.me)) return {};
   
   const meEntries = data.me
-    .filter(item => item && typeof item === 'string')
+    .filter(item => item && typeof item === 'string' && item.includes(':'))
     .map(item => {
       const [boxId, source] = item.split(':');
       return [boxId, source];
@@ -29,6 +29,8 @@ const formatMEBoxSources = (data: Record<string, string[]>) => {
 };
 
 export const CodeCard: React.FC<CodeCardProps> = ({ code, onDoubleClick, onDelete }) => {
+  const meBoxes = formatMEBoxSources(code.data);
+  
   return (
     <HoverCard>
       <HoverCardTrigger asChild>
@@ -74,8 +76,8 @@ export const CodeCard: React.FC<CodeCardProps> = ({ code, onDoubleClick, onDelet
                   <div key={category} className="mb-2">
                     <div className="font-medium capitalize">ME Boxes:</div>
                     <div className="text-muted-foreground">
-                      {Object.entries(meBoxes).map(([boxId, source]) => (
-                        <div key={boxId}>{`${boxId}: ${source}`}</div>
+                      {Object.entries(meBoxes).map(([boxId, source], index) => (
+                        <div key={index}>{`${boxId}: ${source}`}</div>
                       ))}
                     </div>
                   </div>
