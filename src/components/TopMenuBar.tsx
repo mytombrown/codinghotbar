@@ -9,7 +9,7 @@ interface TopMenuBarProps {
 }
 
 const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }: TopMenuBarProps) => {
-  // Create an array of 5 items - 4 original + 1 blank (reduced from 3 blanks)
+  // Create an array of 5 items - 4 original + 1 blank
   const allItems = [
     ...menuItems,
     { id: 'blank1', label: '', items: [] },
@@ -33,11 +33,15 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="text-sm font-medium tracking-wide block">
-              {selectedItems[category.id]?.length > 0 
-                ? selectedItems[category.id][0] 
-                : category.label}
-            </span>
+            {selectedItems[category.id]?.length > 0 ? (
+              <span className="text-sm font-medium tracking-wide block">
+                {selectedItems[category.id][0]}
+              </span>
+            ) : (
+              <span className="text-sm font-medium tracking-wide block">
+                {category.label}
+              </span>
+            )}
           </motion.button>
         </div>
       ))}
