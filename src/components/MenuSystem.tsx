@@ -79,6 +79,13 @@ const MenuSystem = () => {
     setShowSaveDialog(false);
   };
 
+  const handleSourceSelect = (sourceId: string, item: any) => {
+    handleItemSelect(sourceId, item.label);
+    if (item.label === 'ME1') {
+      handleSideItemClick('me');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-menu-dark p-8 flex">
       <div className="flex flex-col">
@@ -165,7 +172,7 @@ const MenuSystem = () => {
             menuItems={menuItems}
             activeCategory={activeCategory}
             selectedItems={selectedItems}
-            onItemSelect={handleItemSelect}
+            onItemSelect={handleSourceSelect}
             musicLevels={musicLevels}
             onMusicLevelChange={handleMusicLevelChange}
             onLowerThirdTextChange={handleLowerThirdTextChange}

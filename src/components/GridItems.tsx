@@ -13,7 +13,7 @@ interface GridItemsProps {
   menuItems: MenuItem[];
   activeCategory: string;
   selectedItems: Record<string, string[]>;
-  onItemSelect: (categoryId: string, item: string, side?: 'L' | 'R') => void;
+  onItemSelect: (categoryId: string, item: string | any) => void;
   musicLevels?: Record<string, string>;
   onMusicLevelChange?: (trackId: string, level: string) => void;
   onLowerThirdTextChange?: (clipId: string, index: number, text: string) => void;
@@ -34,32 +34,20 @@ const GridItems = ({
   onAddLowerThird,
 }: GridItemsProps) => {
 
-  const handleSourceSelect = (sourceId: string, item: any) => {
-    if (item.label === 'ME1') {
-      // Switch to ME section when ME1 is selected
-      onItemSelect('me', item.label);
-    } else {
-      onItemSelect(sourceId, item.label);
-    }
-  };
-
   const handleLinkClick = (item: string) => {
     const itemL = `${item} L`;
     const itemR = `${item} R`;
     const isLSelected = selectedItems[selectedSideItem!]?.includes(itemL);
     const isRSelected = selectedItems[selectedSideItem!]?.includes(itemR);
 
-    // If neither is selected, select both
     if (!isLSelected && !isRSelected) {
       onItemSelect(selectedSideItem!, item, 'L');
       onItemSelect(selectedSideItem!, item, 'R');
     }
-    // If both are selected, deselect both
     else if (isLSelected && isRSelected) {
       onItemSelect(selectedSideItem!, item, 'L');
       onItemSelect(selectedSideItem!, item, 'R');
     }
-    // If one is selected, select the other
     else {
       if (isLSelected) {
         onItemSelect(selectedSideItem!, item, 'R');
@@ -77,7 +65,7 @@ const GridItems = ({
       return selectedMenu.items.map((item) => (
         <motion.button
           key={item.id}
-          onClick={() => handleSourceSelect(selectedSideItem, item)}
+          onClick={() => onItemSelect(selectedSideItem, item)}
           className={`p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
             selectedItems[selectedSideItem]?.includes(item.label)
               ? 'bg-menu-active text-white shadow-lg'
@@ -184,7 +172,7 @@ const GridItems = ({
     if (selectedSideItem === 'me') {
       return (
         <div className="w-full relative">
-          <div className="before:content-[''] before:block before:pb-[56.25%]" /> {/* 16:9 container */}
+          <div className="before:content-[''] before:block before:pb-[56.25%]" />
           <div className="absolute inset-0 p-4 bg-[#1e3a8a] rounded-lg">
             <div className="grid grid-cols-2 gap-4 h-full">
               {selectedMenu.items.map((item: any) => (
