@@ -35,7 +35,7 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="text-xs font-medium tracking-wide block whitespace-nowrap overflow-hidden text-ellipsis px-1">
+            <span className="text-sm font-medium tracking-wide block">
               {selectedItems[category.id]?.length > 0 
                 ? selectedItems[category.id][0] 
                 : category.label}
