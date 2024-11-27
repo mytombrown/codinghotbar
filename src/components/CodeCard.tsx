@@ -71,7 +71,6 @@ export const CodeCard: React.FC<CodeCardProps> = ({ code, onDoubleClick, onDelet
           <div className="text-sm">
             {Object.entries(code.data).map(([category, items]) => {
               if (category === 'me' && Array.isArray(items) && items.length > 0) {
-                const meBoxes = formatMEBoxSources(code.data);
                 return (
                   <div key={category} className="mb-2">
                     <div className="font-medium capitalize">ME Boxes:</div>
