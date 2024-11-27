@@ -57,6 +57,27 @@ const GridItems = ({
     }
   };
 
+  // This is the part that displays transitions/SCTE/auto-advance/GRFX
+  if (!showSideItems) {
+    const activeItems = menuItems.find((category) => category.id === activeCategory)?.items || [];
+    
+    return activeItems.map((item) => (
+      <motion.button
+        key={item}
+        onClick={() => onItemSelect(activeCategory, item)}
+        className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 w-full text-center ${
+          selectedItems[activeCategory]?.includes(item)
+            ? 'bg-menu-active text-white shadow-lg'
+            : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+        }`}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+      >
+        <span className="text-sm font-medium tracking-wide block">{item}</span>
+      </motion.button>
+    ));
+  }
+
   if (showSideItems && selectedSideItem) {
     const selectedMenu = sideMenuItems.find(item => item.id === selectedSideItem);
     if (!selectedMenu?.items) return null;
@@ -316,24 +337,6 @@ const GridItems = ({
       </motion.button>
     ));
   }
-
-  // This is the part that displays transitions/SCTE/auto-advance/GRFX
-  return menuItems.find((category) => category.id === activeCategory)?.items.map((item) => (
-    <motion.button
-      key={item}
-      onClick={() => onItemSelect(activeCategory, item)}
-      className={cn(
-        "p-6 rounded-lg backdrop-blur-sm transition-all duration-300 w-full text-center",
-        selectedItems[activeCategory]?.includes(item)
-          ? "bg-menu-active text-white shadow-lg"
-          : "bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight"
-      )}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-    >
-      <span className="text-sm font-medium tracking-wide block">{item}</span>
-    </motion.button>
-  ));
 };
 
 export default GridItems;
