@@ -57,7 +57,6 @@ const GridItems = ({
     }
   };
 
-  // This is the part that displays transitions/SCTE/auto-advance/GRFX
   if (!showSideItems) {
     const activeItems = menuItems.find((category) => category.id === activeCategory)?.items || [];
     
@@ -191,59 +190,21 @@ const GridItems = ({
     }
 
     if (selectedSideItem === 'me') {
-      return (
-        <div className="w-full relative">
-          <div className="before:content-[''] before:block before:pb-[56.25%]" />
-          <div className="absolute inset-0 p-4 bg-[#1e3a8a] rounded-lg">
-            <div className="grid grid-cols-2 gap-4 h-full">
-              {selectedMenu.items.map((item: any) => (
-                <div key={item.id} className="relative">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <motion.button
-                        className={cn(
-                          "w-full h-full relative",
-                          "bg-black rounded-lg overflow-hidden",
-                          selectedItems[selectedSideItem]?.includes(`${item.id}:${item.selectedSource?.label}`) && "ring-2 ring-menu-active"
-                        )}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        {item.selectedSource && (
-                          <img
-                            src={item.selectedSource.previewImage}
-                            alt={item.label}
-                            className="absolute inset-0 w-full h-full object-cover"
-                          />
-                        )}
-                        <div className="absolute bottom-0 left-0 right-0 p-2 bg-black/70 text-white text-sm">
-                          <div>{item.selectedSource ? item.selectedSource.label : 'No Source'}</div>
-                          <div className="text-xs text-gray-400">{item.type}</div>
-                        </div>
-                      </motion.button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      {sideMenuItems
-                        .find(menu => menu.id === 'source')
-                        ?.items?.map((source: any) => (
-                          <DropdownMenuItem
-                            key={source.id}
-                            onClick={() => {
-                              item.selectedSource = source;
-                              onItemSelect(selectedSideItem, `${item.id}:${source.label}`);
-                            }}
-                          >
-                            {source.label}
-                          </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      );
+      return selectedMenu.items.map((item: any) => (
+        <motion.button
+          key={item.id}
+          onClick={() => onItemSelect(selectedSideItem, item.label)}
+          className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+            selectedItems[selectedSideItem]?.includes(item.label)
+              ? 'bg-menu-active text-white shadow-lg'
+              : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+          }`}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <span className="text-sm font-medium tracking-wide">{item.label}</span>
+        </motion.button>
+      ));
     }
 
     if (selectedSideItem === 'music' && selectedMenu.items.some(item => item.hasLevel)) {
