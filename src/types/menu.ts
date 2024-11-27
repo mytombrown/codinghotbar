@@ -20,11 +20,7 @@ export interface SideMenuItem {
     previewImage?: string;
     duration?: string;
     lowerThirds?: LowerThirdData[];
+    type?: string;
+    selectedSource?: any;
   }>;
-}
-
-export interface SelectedAudioItem {
-  id: string;
-  label: string;
-  side: 'L' | 'R';
 }
