@@ -20,7 +20,7 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
   return (
     <div className="grid grid-cols-7 gap-4">
       {allItems.map((category) => (
-        <div key={category.id} className="space-y-2">
+        <div key={category.id}>
           <motion.button
             onClick={() => onTopMenuClick(category.id)}
             className={`w-full p-3 rounded-lg backdrop-blur-sm transition-all duration-300 ${
@@ -35,22 +35,12 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="text-xs font-medium tracking-wide">{category.label}</span>
+            <span className="text-xs font-medium tracking-wide">
+              {selectedItems[category.id]?.length > 0 
+                ? selectedItems[category.id][0] 
+                : category.label}
+            </span>
           </motion.button>
-          
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className={`min-h-[2.5rem] rounded-lg px-2 py-1 flex items-center justify-center text-xs ${
-              selectedItems[category.id]?.length > 0
-                ? 'bg-menu-active text-white'
-                : 'bg-menu-darker/40 text-menu-subtext'
-            }`}
-          >
-            {selectedItems[category.id]?.length > 0 && (
-              <span className="truncate w-full text-center">{selectedItems[category.id].join(', ')}</span>
-            )}
-          </motion.div>
         </div>
       ))}
     </div>
