@@ -10,7 +10,6 @@ interface TopMenuBarProps {
 }
 
 const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }: TopMenuBarProps) => {
-  // Create an array of 5 items - 4 original + 1 blank
   const allItems = [
     ...menuItems,
     { id: 'blank1', label: '', items: [] },
@@ -22,7 +21,7 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
         <div key={category.id}>
           <motion.button
             onClick={() => onTopMenuClick(category.id)}
-            className={`w-full p-3 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+            className={`relative w-full p-3 rounded-lg backdrop-blur-sm transition-all duration-300 ${
               activeCategory === category.id
                 ? selectedItems[category.id]?.length > 0
                   ? 'bg-green-600 text-white shadow-lg'
@@ -34,7 +33,7 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="text-sm font-medium tracking-wide block min-h-[1.5rem] whitespace-nowrap overflow-hidden text-ellipsis">
+            <span className="relative z-10 text-sm font-medium tracking-wide block min-h-[1.5rem] whitespace-nowrap overflow-hidden text-ellipsis">
               {category.id !== 'blank1' && (
                 selectedItems[category.id]?.length > 0
                   ? selectedItems[category.id][0]
