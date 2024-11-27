@@ -5,6 +5,7 @@ import { Plus, Link } from 'lucide-react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { cn } from "@/lib/utils";
+import MESection from './MESection';
 
 interface GridItemsProps {
   showSideItems: boolean;
@@ -190,21 +191,15 @@ const GridItems = ({
     }
 
     if (selectedSideItem === 'me') {
-      return selectedMenu.items.map((item: any) => (
-        <motion.button
-          key={item.id}
-          onClick={() => onItemSelect(selectedSideItem, item.label)}
-          className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-            selectedItems[selectedSideItem]?.includes(item.label)
-              ? 'bg-menu-active text-white shadow-lg'
-              : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-          }`}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <span className="text-sm font-medium tracking-wide">{item.label}</span>
-        </motion.button>
-      ));
+      return (
+        <MESection
+          selectedMenu={selectedMenu}
+          selectedSideItem={selectedSideItem}
+          selectedItems={selectedItems}
+          sideMenuItems={sideMenuItems}
+          onItemSelect={onItemSelect}
+        />
+      );
     }
 
     if (selectedSideItem === 'music' && selectedMenu.items.some(item => item.hasLevel)) {
