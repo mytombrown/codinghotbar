@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 import { MenuItem } from '../types/menu';
 
@@ -33,10 +34,12 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            <span className="text-sm font-medium tracking-wide block min-h-[1.5rem]">
-              {selectedItems[category.id]?.length > 0 
-                ? selectedItems[category.id][0]
-                : category.label}
+            <span className="text-sm font-medium tracking-wide block min-h-[1.5rem] whitespace-nowrap overflow-hidden text-ellipsis">
+              {category.id !== 'blank1' && (
+                selectedItems[category.id]?.length > 0
+                  ? selectedItems[category.id][0]
+                  : category.label
+              )}
             </span>
           </motion.button>
         </div>
