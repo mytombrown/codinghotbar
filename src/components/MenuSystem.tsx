@@ -80,12 +80,21 @@ const MenuSystem = () => {
 
   return (
     <div className="min-h-screen bg-menu-dark p-8 flex">
-      <SideMenu
-        items={sideMenuItems}
-        selectedSideItem={selectedSideItem}
-        selectedItems={selectedItems}
-        onItemClick={handleSideItemClick}
-      />
+      <div className="flex flex-col">
+        <div className="mb-16">
+          <img 
+            src="/lovable-uploads/09033254-1f55-429f-9954-5e61252f8132.png" 
+            alt="TVU Networks Logo" 
+            className="w-32 h-auto"
+          />
+        </div>
+        <SideMenu
+          items={sideMenuItems}
+          selectedSideItem={selectedSideItem}
+          selectedItems={selectedItems}
+          onItemClick={handleSideItemClick}
+        />
+      </div>
 
       <div className="flex-1">
         <div className="flex justify-between mb-4">
