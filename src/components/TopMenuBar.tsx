@@ -44,10 +44,10 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
             className={`h-10 rounded-lg p-2 flex items-center justify-center text-sm ${
               selectedItems[category.id]?.length > 0
                 ? 'bg-menu-active text-white'
-                : 'bg-menu-darker/40'
+                : 'bg-menu-darker/40 text-menu-subtext'
             }`}
           >
-            {selectedItems[category.id]?.length > 0 ? selectedItems[category.id].join(', ') : ''}
+            {selectedItems[category.id]?.length > 0 && selectedItems[category.id].join(', ')}
           </motion.div>
         </div>
       ))}
