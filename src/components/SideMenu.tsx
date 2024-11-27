@@ -9,12 +9,21 @@ interface SideMenuProps {
 }
 
 const SideMenu = ({ items, selectedSideItem, selectedItems, onItemClick }: SideMenuProps) => {
+  const handleItemClick = (item: SideMenuItem) => {
+    // If ME1 is selected in source, switch to ME section
+    if (item.id === 'source' && selectedItems[item.id]?.includes('ME1')) {
+      onItemClick('me');
+      return;
+    }
+    onItemClick(item.id);
+  };
+
   return (
     <div className="w-32 space-y-2 mr-8 mt-16">
       {items.map((item) => (
         <motion.button
           key={item.id}
-          onClick={() => onItemClick(item.id)}
+          onClick={() => handleItemClick(item)}
           className={`w-full p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
             selectedSideItem === item.id
               ? selectedItems[item.id]?.length > 0
