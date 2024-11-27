@@ -81,7 +81,7 @@ const MenuSystem = () => {
   return (
     <div className="min-h-screen bg-menu-dark p-8 flex">
       <div className="flex flex-col">
-        <div className="mb-16">
+        <div className="mb-8">
           <img 
             src="/lovable-uploads/09033254-1f55-429f-9954-5e61252f8132.png" 
             alt="TVU Networks Logo" 
