@@ -101,9 +101,11 @@ const MenuSystem = () => {
           <Button
             onClick={() => navigate("/codes")}
             variant="outline"
-            className="text-white"
+            className="text-white group relative"
           >
-            Back
+            <span className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              Back
+            </span>
           </Button>
           <Button
             onClick={handleSaveClick}
