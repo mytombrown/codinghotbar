@@ -80,7 +80,26 @@ export const sideMenuItems: SideMenuItem[] = [
       }
     ]
   },
-  { id: 'me', label: 'ME' },
+  { 
+    id: 'me', 
+    label: 'ME',
+    items: [
+      {
+        id: 'me1',
+        label: 'ME Box 1',
+        type: 'box',
+        previewImage: null,
+        selectedSource: null
+      },
+      {
+        id: 'me2',
+        label: 'ME Box 2',
+        type: 'box',
+        previewImage: null,
+        selectedSource: null
+      }
+    ]
+  },
   { id: 'l3', label: 'L3' },
   { id: 'ext-dev', label: 'EXT DEV' },
   { 
