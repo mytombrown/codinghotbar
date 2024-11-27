@@ -9,16 +9,14 @@ interface TopMenuBarProps {
 }
 
 const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }: TopMenuBarProps) => {
-  // Create an array of 7 items - 4 original + 3 blank
+  // Create an array of 5 items - 4 original + 1 blank (reduced from 3 blanks)
   const allItems = [
     ...menuItems,
     { id: 'blank1', label: '', items: [] },
-    { id: 'blank2', label: '', items: [] },
-    { id: 'blank3', label: '', items: [] },
   ];
 
   return (
-    <div className="grid grid-cols-7 gap-4">
+    <div className="grid grid-cols-5 gap-4">
       {allItems.map((category) => (
         <div key={category.id}>
           <motion.button
