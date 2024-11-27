@@ -37,6 +37,18 @@ const MenuSystem = () => {
     handleTopMenuClick,
   } = useMenuState(id);
 
+  const handleSourceSelect = (sourceId: string, item: any, side?: 'L' | 'R') => {
+    // First handle the source selection
+    handleItemSelect(sourceId, item.label, side);
+    
+    // Then, if it's ME1, wait a brief moment before navigating to ensure the selection is processed
+    if (item.label === 'ME1') {
+      setTimeout(() => {
+        handleSideItemClick('me');
+      }, 100);
+    }
+  };
+
   useEffect(() => {
     if (id) {
       const savedCodes = JSON.parse(localStorage.getItem("saved-codes") || "[]");
@@ -77,13 +89,6 @@ const MenuSystem = () => {
       navigate("/codes");
     }
     setShowSaveDialog(false);
-  };
-
-  const handleSourceSelect = (sourceId: string, item: any, side?: 'L' | 'R') => {
-    handleItemSelect(sourceId, item.label, side);
-    if (item.label === 'ME1') {
-      handleSideItemClick('me');
-    }
   };
 
   return (
