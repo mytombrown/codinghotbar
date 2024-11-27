@@ -41,14 +41,14 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className={`h-10 rounded-lg p-2 flex items-center justify-center text-sm ${
+            className={`min-h-[2.5rem] rounded-lg px-2 py-1 flex items-center justify-center text-xs ${
               selectedItems[category.id]?.length > 0
                 ? 'bg-menu-active text-white'
                 : 'bg-menu-darker/40 text-menu-subtext'
             }`}
           >
             {selectedItems[category.id] && selectedItems[category.id].length > 0 ? (
-              <span className="truncate">{selectedItems[category.id].join(', ')}</span>
+              <span className="truncate w-full text-center">{selectedItems[category.id].join(', ')}</span>
             ) : null}
           </motion.div>
         </div>
