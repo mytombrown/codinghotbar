@@ -10,7 +10,7 @@ interface SideMenuProps {
 
 const SideMenu = ({ items, selectedSideItem, selectedItems, onItemClick }: SideMenuProps) => {
   return (
-    <div className="w-32 space-y-2 mr-8">
+    <div className="w-32 space-y-2 mr-8 mt-16">
       {items.map((item) => (
         <motion.button
           key={item.id}
