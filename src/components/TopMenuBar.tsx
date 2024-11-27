@@ -24,7 +24,7 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
             className={`w-full p-3 rounded-lg backdrop-blur-sm transition-all duration-300 ${
               activeCategory === category.id
                 ? selectedItems[category.id]?.length > 0
-                  ? 'bg-green-800 text-white shadow-lg'
+                  ? 'bg-green-600 text-white shadow-lg'
                   : 'bg-menu-active text-white shadow-lg'
                 : selectedItems[category.id]?.length > 0
                 ? 'bg-green-600 text-white'
@@ -33,15 +33,11 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
-            {selectedItems[category.id]?.length > 0 ? (
-              <span className="text-sm font-medium tracking-wide block">
-                {selectedItems[category.id][0]}
-              </span>
-            ) : (
-              <span className="text-sm font-medium tracking-wide block">
-                {category.label}
-              </span>
-            )}
+            <span className="text-sm font-medium tracking-wide block min-h-[1.5rem]">
+              {selectedItems[category.id]?.length > 0 
+                ? selectedItems[category.id][0]
+                : category.label}
+            </span>
           </motion.button>
         </div>
       ))}
