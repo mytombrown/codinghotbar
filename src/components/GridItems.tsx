@@ -13,7 +13,7 @@ interface GridItemsProps {
   menuItems: MenuItem[];
   activeCategory: string;
   selectedItems: Record<string, string[]>;
-  onItemSelect: (categoryId: string, item: string | any) => void;
+  onItemSelect: (categoryId: string, item: string | any, side?: 'L' | 'R') => void;
   musicLevels?: Record<string, string>;
   onMusicLevelChange?: (trackId: string, level: string) => void;
   onLowerThirdTextChange?: (clipId: string, index: number, text: string) => void;

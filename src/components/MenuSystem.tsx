@@ -79,8 +79,8 @@ const MenuSystem = () => {
     setShowSaveDialog(false);
   };
 
-  const handleSourceSelect = (sourceId: string, item: any) => {
-    handleItemSelect(sourceId, item.label);
+  const handleSourceSelect = (sourceId: string, item: any, side?: 'L' | 'R') => {
+    handleItemSelect(sourceId, item.label, side);
     if (item.label === 'ME1') {
       handleSideItemClick('me');
     }
