@@ -183,7 +183,7 @@ const GridItems = ({
                         className={cn(
                           "w-full h-full relative",
                           "bg-black rounded-lg overflow-hidden",
-                          selectedItems[selectedSideItem]?.includes(item.label) && "ring-2 ring-menu-active"
+                          selectedItems[selectedSideItem]?.includes(`${item.id}:${item.selectedSource?.label}`) && "ring-2 ring-menu-active"
                         )}
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
@@ -209,7 +209,7 @@ const GridItems = ({
                             key={source.id}
                             onClick={() => {
                               item.selectedSource = source;
-                              onItemSelect(selectedSideItem, item.label);
+                              onItemSelect(selectedSideItem, `${item.id}:${source.label}`);
                             }}
                           >
                             {source.label}

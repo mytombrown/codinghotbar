@@ -102,6 +102,17 @@ const Codes = () => {
     }
   };
 
+  const formatMEBoxSources = (data: Record<string, string[]>) => {
+    if (!data.me) return {};
+    
+    const meEntries = data.me.map(item => {
+      const [boxId, source] = item.split(':');
+      return [boxId, source];
+    });
+    
+    return Object.fromEntries(meEntries);
+  };
+
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <div className="min-h-screen bg-menu-dark flex flex-col">
@@ -190,16 +201,29 @@ const Codes = () => {
                             <div className="space-y-2">
                               <h4 className="text-sm font-semibold">{code.name}</h4>
                               <div className="text-sm">
-                                {Object.entries(code.data).map(([category, items]) => (
-                                  items.length > 0 && (
+                                {Object.entries(code.data).map(([category, items]) => {
+                                  if (category === 'me' && Array.isArray(items) && items.length > 0) {
+                                    const meBoxes = formatMEBoxSources(code.data);
+                                    return (
+                                      <div key={category} className="mb-2">
+                                        <div className="font-medium capitalize">ME Boxes:</div>
+                                        <div className="text-muted-foreground">
+                                          {Object.entries(meBoxes).map(([boxId, source]) => (
+                                            <div key={boxId}>{`${boxId}: ${source}`}</div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    );
+                                  }
+                                  return Array.isArray(items) && items.length > 0 && category !== 'me' && (
                                     <div key={category} className="mb-2">
                                       <div className="font-medium capitalize">{category}:</div>
                                       <div className="text-muted-foreground">
                                         {items.join(', ')}
                                       </div>
                                     </div>
-                                  )
-                                ))}
+                                  );
+                                })}
                               </div>
                             </div>
                           </HoverCardContent>
