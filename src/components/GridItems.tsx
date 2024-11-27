@@ -34,6 +34,15 @@ const GridItems = ({
   onAddLowerThird,
 }: GridItemsProps) => {
 
+  const handleSourceSelect = (sourceId: string, item: any) => {
+    if (item.label === 'ME1') {
+      // Switch to ME section when ME1 is selected
+      onItemSelect('me', item.label);
+    } else {
+      onItemSelect(sourceId, item.label);
+    }
+  };
+
   const handleLinkClick = (item: string) => {
     const itemL = `${item} L`;
     const itemR = `${item} R`;
@@ -68,7 +77,7 @@ const GridItems = ({
       return selectedMenu.items.map((item) => (
         <motion.button
           key={item.id}
-          onClick={() => onItemSelect(selectedSideItem, item.label)}
+          onClick={() => handleSourceSelect(selectedSideItem, item)}
           className={`p-4 rounded-lg backdrop-blur-sm transition-all duration-300 ${
             selectedItems[selectedSideItem]?.includes(item.label)
               ? 'bg-menu-active text-white shadow-lg'
