@@ -5,6 +5,12 @@ import { Plus, Link } from 'lucide-react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import { cn } from "@/lib/utils";
+import MEBoxes from './ME/MEBoxes';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 interface GridItemsProps {
   showSideItems: boolean;
@@ -36,7 +42,6 @@ const GridItems = ({
 
   const handleSourceSelect = (sourceId: string, item: any) => {
     if (item.label === 'ME1') {
-      // Switch to ME section when ME1 is selected
       onItemSelect('me', item.label);
     } else {
       onItemSelect(sourceId, item.label);
@@ -49,18 +54,13 @@ const GridItems = ({
     const isLSelected = selectedItems[selectedSideItem!]?.includes(itemL);
     const isRSelected = selectedItems[selectedSideItem!]?.includes(itemR);
 
-    // If neither is selected, select both
     if (!isLSelected && !isRSelected) {
       onItemSelect(selectedSideItem!, item, 'L');
       onItemSelect(selectedSideItem!, item, 'R');
-    }
-    // If both are selected, deselect both
-    else if (isLSelected && isRSelected) {
+    } else if (isLSelected && isRSelected) {
       onItemSelect(selectedSideItem!, item, 'L');
       onItemSelect(selectedSideItem!, item, 'R');
-    }
-    // If one is selected, select the other
-    else {
+    } else {
       if (isLSelected) {
         onItemSelect(selectedSideItem!, item, 'R');
       } else {
@@ -98,6 +98,17 @@ const GridItems = ({
           <span className="text-sm font-medium tracking-wide">{item.label}</span>
         </motion.button>
       ));
+    }
+
+    if (selectedSideItem === 'me') {
+      return (
+        <MEBoxes 
+          items={selectedMenu.items}
+          selectedItems={selectedItems}
+          onItemSelect={onItemSelect}
+          sideMenuItems={sideMenuItems}
+        />
+      );
     }
 
     if (selectedSideItem === 'clips') {
@@ -179,58 +190,6 @@ const GridItems = ({
           )}
         </motion.div>
       ));
-    }
-
-    if (selectedSideItem === 'me') {
-      return (
-        <div className="w-full relative">
-          <div className="before:content-[''] before:block before:pb-[56.25%]" /> {/* 16:9 container */}
-          <div className="absolute inset-0 p-4 bg-[#1e3a8a] rounded-lg">
-            <div className="grid grid-cols-2 gap-4 h-full">
-              {selectedMenu.items.map((item: any) => (
-                <div key={item.id} className="relative">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <motion.button
-                        className={cn(
-                          "w-full h-full relative",
-                          "bg-black rounded-lg overflow-hidden",
-                          selectedItems[selectedSideItem]?.includes(item.label) && "ring-2 ring-menu-active"
-                        )}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                      >
-                        {item.selectedSource && (
-                          <img
-                            src={item.selectedSource.previewImage}
-                            alt={item.label}
-                            className="absolute inset-0 w-full h-full object-cover"
-                          />
-                        )}
-                      </motion.button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      {sideMenuItems
-                        .find(menu => menu.id === 'source')
-                        ?.items?.map((source: any) => (
-                          <DropdownMenuItem
-                            key={source.id}
-                            onClick={() => {
-                              item.selectedSource = source;
-                              onItemSelect(selectedSideItem, item.label);
-                            }}
-                          >
-                            {source.label}
-                          </DropdownMenuItem>
-                        ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      );
     }
 
     if (selectedSideItem === 'music' && selectedMenu.items.some(item => item.hasLevel)) {
@@ -326,19 +285,40 @@ const GridItems = ({
   }
 
   return menuItems.find((category) => category.id === activeCategory)?.items.map((item) => (
-    <motion.button
-      key={item}
-      onClick={() => onItemSelect(activeCategory, item)}
-      className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
-        selectedItems[activeCategory]?.includes(item)
-          ? 'bg-menu-active text-white shadow-lg'
-          : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-      }`}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-    >
-      <span className="text-sm font-medium tracking-wide">{item}</span>
-    </motion.button>
+    <HoverCard key={item}>
+      <HoverCardTrigger asChild>
+        <motion.button
+          onClick={() => onItemSelect(activeCategory, item)}
+          className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+            selectedItems[activeCategory]?.includes(item)
+              ? 'bg-menu-active text-white shadow-lg'
+              : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+          }`}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <span className="text-sm font-medium tracking-wide">{item}</span>
+        </motion.button>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-80">
+        <div className="space-y-2">
+          <h4 className="text-sm font-semibold">Sources</h4>
+          <div className="text-sm">
+            {selectedItems['me']?.map((meItem, index) => {
+              const meBox = sideMenuItems
+                .find(menu => menu.id === 'me')
+                ?.items?.find(box => box.label === meItem);
+              return meBox?.selectedSource ? (
+                <div key={index} className="flex items-center gap-2 mb-1">
+                  <span className="font-medium">{meBox.label}:</span>
+                  <span className="text-muted-foreground">{meBox.selectedSource.label}</span>
+                </div>
+              ) : null;
+            })}
+          </div>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
   ));
 };
 
