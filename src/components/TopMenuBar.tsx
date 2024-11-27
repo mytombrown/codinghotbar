@@ -21,7 +21,7 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
         <div key={category.id}>
           <motion.button
             onClick={() => onTopMenuClick(category.id)}
-            className={`relative w-full h-12 rounded-lg backdrop-blur-sm transition-all duration-300 flex items-center justify-center ${
+            className={`relative w-full h-12 rounded-lg backdrop-blur-sm transition-all duration-300 ${
               activeCategory === category.id
                 ? selectedItems[category.id]?.length > 0
                   ? 'bg-green-600 text-white shadow-lg'
@@ -34,11 +34,13 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
             whileTap={{ scale: 0.98 }}
           >
             {category.id !== 'blank1' && (
-              <span className="px-3 text-sm font-medium truncate max-w-full">
-                {selectedItems[category.id]?.length > 0
-                  ? selectedItems[category.id][0]
-                  : category.label}
-              </span>
+              <div className="absolute inset-0 flex items-center justify-center px-3">
+                <span className="text-sm font-medium truncate w-full text-center">
+                  {selectedItems[category.id]?.length > 0
+                    ? selectedItems[category.id][0]
+                    : category.label}
+                </span>
+              </div>
             )}
           </motion.button>
         </div>
