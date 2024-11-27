@@ -47,7 +47,9 @@ const TopMenuBar = ({ menuItems, activeCategory, selectedItems, onTopMenuClick }
                 : 'bg-menu-darker/40 text-menu-subtext'
             }`}
           >
-            {selectedItems[category.id]?.length > 0 && selectedItems[category.id].join(', ')}
+            {selectedItems[category.id] && selectedItems[category.id].length > 0 ? (
+              <span className="truncate">{selectedItems[category.id].join(', ')}</span>
+            ) : null}
           </motion.div>
         </div>
       ))}
