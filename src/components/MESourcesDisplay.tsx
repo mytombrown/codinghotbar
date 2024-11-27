@@ -1,4 +1,5 @@
 import React from 'react';
+import { sideMenuItems } from '../data/menuItems';
 
 interface MESourcesDisplayProps {
   meData: Record<string, string[]>;
@@ -14,13 +15,16 @@ const MESourcesDisplay = ({ meData }: MESourcesDisplayProps) => {
       <h4 className="text-sm font-semibold">ME Sources</h4>
       <div className="text-sm">
         {meData['me'].map((meItem, index) => {
-          const meBox = meItem;
+          const meBox = sideMenuItems
+            .find(menu => menu.id === 'me')
+            ?.items?.find(box => box.label === meItem);
+
           return (
             <div key={index} className="flex items-center gap-2 mb-1">
-              <span className="font-medium">{meBox}:</span>
-              {meData['source']?.length > 0 && (
+              <span className="font-medium">{meBox?.label}:</span>
+              {meBox?.selectedSource && (
                 <span className="text-muted-foreground">
-                  {meData['source'].join(', ')}
+                  {meBox.selectedSource.label}
                 </span>
               )}
             </div>
