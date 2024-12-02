@@ -23,7 +23,7 @@ export const singularApiRequest = async (
   }
 
   try {
-    const response = await fetch(`https://api.singular.live/api/v1/${endpoint}`, {
+    const response = await fetch(`https://api.singular.live/v1/${endpoint}`, {
       method,
       headers: {
         'Authorization': `Bearer ${apiKey}`,
