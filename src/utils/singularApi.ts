@@ -28,7 +28,11 @@ export const singularApiRequest = async (
       headers: {
         'Authorization': `Bearer ${apiKey}`,
         'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Origin': window.location.origin,
       },
+      mode: 'cors',
+      credentials: 'include',
       body: body ? JSON.stringify(body) : undefined,
     });
 
