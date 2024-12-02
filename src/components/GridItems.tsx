@@ -11,6 +11,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import SingularProjects from './SingularProjects';
 
 interface GridItemsProps {
   showSideItems: boolean;
@@ -68,6 +69,10 @@ const GridItems = ({
       }
     }
   };
+
+  if (activeCategory === 'grfx') {
+    return <SingularProjects onSelect={onItemSelect} selectedItems={selectedItems} />;
+  }
 
   if (showSideItems && selectedSideItem) {
     const selectedMenu = sideMenuItems.find(item => item.id === selectedSideItem);
