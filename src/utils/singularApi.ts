@@ -24,7 +24,7 @@ export const singularApiRequest = async (
 
   try {
     console.log('Making request with API key:', apiKey); // Debug log
-    const response = await fetch(`https://api.singular.live/api/v1/${endpoint}`, {
+    const response = await fetch(`https://app.singular.live/apiv2/controlapps/${apiKey}/control`, {
       method,
       headers: {
         'Authorization': `Bearer ${apiKey}`,
