@@ -23,6 +23,7 @@ export const singularApiRequest = async (
   }
 
   try {
+    console.log('Making request with API key:', apiKey); // Debug log
     const response = await fetch(`https://api.singular.live/api/v1/${endpoint}`, {
       method,
       headers: {
@@ -34,10 +35,12 @@ export const singularApiRequest = async (
     });
 
     if (!response.ok) {
+      console.error('API Response not OK:', response.status, response.statusText);
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
+    console.log('API Response:', data); // Debug log
     return {
       success: true,
       data,
