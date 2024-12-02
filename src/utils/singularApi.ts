@@ -23,7 +23,7 @@ export const singularApiRequest = async (
   }
 
   try {
-    const response = await fetch(`https://api.singular.live/v1/${endpoint}`, {
+    const response = await fetch(`https://api.singular.live/api/v1/${endpoint}`, {
       method,
       headers: {
         'Authorization': `Bearer ${apiKey}`,
@@ -43,6 +43,7 @@ export const singularApiRequest = async (
       data,
     };
   } catch (error) {
+    console.error('Singular API Error:', error);
     return {
       success: false,
       error: error instanceof Error ? error.message : 'An unknown error occurred',
