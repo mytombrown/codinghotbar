@@ -3,27 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { useToast } from "@/components/ui/use-toast";
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { Trash2, Settings } from "lucide-react";
-import { getCodeThumbnail } from "../utils/thumbnailUtils";
-import Hotbar from "../components/Hotbar";
-import MESourcesDisplay from "../components/MESourcesDisplay";
+import { DragDropContext } from '@hello-pangea/dnd';
+import { Settings } from "lucide-react";
 import { SingularSettings } from "../components/SingularSettings";
+import Hotbar from "../components/Hotbar";
+import SavedCodeGrid from "../components/codes/SavedCodeGrid";
+import DeleteCodeDialog from "../components/codes/DeleteCodeDialog";
 
 interface SavedCode {
   id: string;
@@ -138,98 +123,17 @@ const Codes = () => {
             </div>
           )}
 
-          <AlertDialog open={!!codeToDelete} onOpenChange={() => setCodeToDelete(null)}>
-            <AlertDialogContent>
-              <AlertDialogHeader>
-                <AlertDialogTitle>Delete Code</AlertDialogTitle>
-                <AlertDialogDescription>
-                  Are you sure you want to delete "{codeToDelete?.name}"? This action cannot be undone.
-                </AlertDialogDescription>
-              </AlertDialogHeader>
-              <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={confirmDelete} className="bg-red-600 hover:bg-red-700">
-                  Delete
-                </AlertDialogAction>
-              </AlertDialogFooter>
-            </AlertDialogContent>
-          </AlertDialog>
+          <SavedCodeGrid
+            savedCodes={savedCodes}
+            onDoubleClick={handleDoubleClick}
+            onDeleteCode={handleDeleteCode}
+          />
 
-          <Droppable droppableId="codes" direction="horizontal">
-            {(provided) => (
-              <div 
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                className="grid grid-cols-6 gap-2"
-              >
-                {savedCodes.map((code, index) => (
-                  <Draggable key={code.id} draggableId={code.id} index={index}>
-                    {(provided) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                      >
-                        <HoverCard>
-                          <HoverCardTrigger asChild>
-                            <motion.div
-                              onDoubleClick={() => handleDoubleClick(code.id)}
-                              className="aspect-square p-2 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
-                              whileHover={{ scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
-                            >
-                              <div className="flex justify-end">
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleDeleteCode(code);
-                                  }}
-                                  className="hover:bg-red-500/20 hover:text-red-500"
-                                >
-                                  <Trash2 className="h-3 w-3" />
-                                </Button>
-                              </div>
-                              <div className="w-12 h-12 mx-auto mb-1 rounded-md overflow-hidden">
-                                <img
-                                  src={getCodeThumbnail(code.data)}
-                                  alt={code.name}
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
-                              <span className="text-xs font-medium tracking-wide text-white block text-center truncate">
-                                {code.name}
-                              </span>
-                            </motion.div>
-                          </HoverCardTrigger>
-                          <HoverCardContent className="w-80">
-                            <div className="space-y-2">
-                              <h4 className="text-sm font-semibold">{code.name}</h4>
-                              <MESourcesDisplay meData={code.data} />
-                              <div className="text-sm">
-                                {Object.entries(code.data).map(([category, items]) => (
-                                  items.length > 0 && category !== 'me' && category !== 'source' && (
-                                    <div key={category} className="mb-2">
-                                      <div className="font-medium capitalize">{category}:</div>
-                                      <div className="text-muted-foreground">
-                                        {items.join(', ')}
-                                      </div>
-                                    </div>
-                                  )
-                                ))}
-                              </div>
-                            </div>
-                          </HoverCardContent>
-                        </HoverCard>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
+          <DeleteCodeDialog
+            codeToDelete={codeToDelete}
+            onClose={() => setCodeToDelete(null)}
+            onConfirm={confirmDelete}
+          />
 
           <Hotbar items={hotbarItems} showHotbar={showHotbar} />
         </div>
