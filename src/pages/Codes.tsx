@@ -19,10 +19,11 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
-import { Trash2 } from "lucide-react";
+import { Trash2, Settings } from "lucide-react";
 import { getCodeThumbnail } from "../utils/thumbnailUtils";
 import Hotbar from "../components/Hotbar";
 import MESourcesDisplay from "../components/MESourcesDisplay";
+import { SingularSettings } from "../components/SingularSettings";
 
 interface SavedCode {
   id: string;
@@ -40,6 +41,7 @@ const Codes = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [showHotbar, setShowHotbar] = useState(true);
+  const [showSettings, setShowSettings] = useState(false);
   const [savedCodes, setSavedCodes] = useState<SavedCode[]>(() => {
     const saved = localStorage.getItem("saved-codes");
     return saved ? JSON.parse(saved) : [];
@@ -120,7 +122,21 @@ const Codes = () => {
             >
               {showHotbar ? 'Hide Hotbar' : 'Show Hotbar'}
             </Button>
+            <Button
+              onClick={() => setShowSettings(!showSettings)}
+              className="ml-auto"
+              variant="outline"
+            >
+              <Settings className="h-4 w-4 mr-2" />
+              Settings
+            </Button>
           </div>
+
+          {showSettings && (
+            <div className="mb-8">
+              <SingularSettings />
+            </div>
+          )}
 
           <AlertDialog open={!!codeToDelete} onOpenChange={() => setCodeToDelete(null)}>
             <AlertDialogContent>
