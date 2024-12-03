@@ -15,6 +15,11 @@ interface SingularProject {
   id: string;
   name: string;
   fields?: { id: string; name: string; }[];
+  subcompositions?: {
+    id: string;
+    name: string;
+    model?: { id: string; title: string; type: string; defaultValue?: string; }[];
+  }[];
 }
 
 interface SingularProjectsProps {
@@ -61,11 +66,16 @@ const SingularProjects = ({ onSelect, selectedItems }: SingularProjectsProps) =>
     }));
   };
 
-  const handleUpdateData = async (projectId: string) => {
+  const handleUpdateData = async (projectId: string, subCompName?: string) => {
+    const payload = {
+      subCompositionName: subCompName || '',
+      payload: projectData[projectId] || {}
+    };
+
     const response = await singularApiRequest(
       `${projectId}/data`,
       'PUT',
-      { data: projectData[projectId] }
+      payload
     );
 
     if (response.success) {
@@ -100,7 +110,7 @@ const SingularProjects = ({ onSelect, selectedItems }: SingularProjectsProps) =>
 
   return (
     <div className="space-y-4">
-      {projects.map((project) => (
+      {projects.map((project: SingularProject) => (
         <Accordion key={project.id} type="single" collapsible>
           <AccordionItem value={project.id}>
             <AccordionTrigger
@@ -114,25 +124,30 @@ const SingularProjects = ({ onSelect, selectedItems }: SingularProjectsProps) =>
               {project.name}
             </AccordionTrigger>
             <AccordionContent>
-              {project.fields?.map((field) => (
-                <div key={field.id} className="mt-2 space-y-2">
-                  <label className="text-sm text-menu-subtext">
-                    {field.name}
-                  </label>
-                  <Input
-                    value={projectData[project.id]?.[field.id] || ''}
-                    onChange={(e) => handleDataChange(project.id, field.id, e.target.value)}
-                    className="bg-menu-darker text-white"
-                    placeholder={`Enter ${field.name}`}
-                  />
+              {project.subcompositions?.map((subcomp) => (
+                <div key={subcomp.id} className="mb-4 p-4 bg-menu-darker/50 rounded-lg">
+                  <h3 className="text-white mb-2">{subcomp.name}</h3>
+                  {subcomp.model?.map((field) => (
+                    <div key={field.id} className="mt-2 space-y-2">
+                      <label className="text-sm text-menu-subtext">
+                        {field.title}
+                      </label>
+                      <Input
+                        value={projectData[project.id]?.[field.id] || field.defaultValue || ''}
+                        onChange={(e) => handleDataChange(project.id, field.id, e.target.value)}
+                        className="bg-menu-darker text-white"
+                        placeholder={`Enter ${field.title}`}
+                      />
+                    </div>
+                  ))}
+                  <Button
+                    onClick={() => handleUpdateData(project.id, subcomp.name)}
+                    className="mt-4 w-full"
+                  >
+                    Update {subcomp.name}
+                  </Button>
                 </div>
               ))}
-              <Button
-                onClick={() => handleUpdateData(project.id)}
-                className="mt-4 w-full"
-              >
-                Update Data
-              </Button>
             </AccordionContent>
           </AccordionItem>
         </Accordion>
