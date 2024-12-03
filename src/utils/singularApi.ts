@@ -4,6 +4,11 @@ interface SingularApiResponse {
   error?: string;
 }
 
+interface CompositionPayload {
+  subCompositionName: string;
+  payload: Record<string, string>;
+}
+
 export const getSingularApiKey = (): string | null => {
   return localStorage.getItem('singular-api-key');
 };
@@ -34,7 +39,12 @@ export const singularApiRequest = async (
         'Content-Type': 'application/json',
         'Accept': 'application/json',
       },
-      body: body ? JSON.stringify(body) : undefined,
+      body: body ? JSON.stringify({
+        compositions: Array.isArray(body) ? body : [{
+          subCompositionName: body.subCompositionName || '',
+          payload: body.payload || {}
+        }]
+      }) : undefined,
     });
 
     if (!response.ok) {
@@ -48,7 +58,7 @@ export const singularApiRequest = async (
 
     return {
       success: true,
-      data,
+      data: data.compositions || data,
     };
   } catch (error) {
     console.error('Singular API Error:', error);
