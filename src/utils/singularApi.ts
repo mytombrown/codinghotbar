@@ -23,7 +23,8 @@ export const singularApiRequest = async (
   }
 
   try {
-    const url = `https://app.singular.live/apiv2/controlapps/${apiKey}/control/${endpoint}`;
+    const url = `https://app.singular.live/apiv2/controlapps/${apiKey}/${endpoint}`;
+
     console.log('Making request to URL:', url);
 
     const response = await fetch(url, {
@@ -42,6 +43,7 @@ export const singularApiRequest = async (
     }
 
     const data = await response.json();
+    
     console.log('API Response:', data);
 
     return {
