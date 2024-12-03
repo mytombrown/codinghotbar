@@ -25,6 +25,7 @@ export const singularApiRequest = async (
   try {
     console.log('Making request with API key:', apiKey); // Debug log
     const url = `https://app.singular.live/apiv2/controlapps/${apiKey}/control/${endpoint}`;
+    console.log('Request URL:', url); // Debug log
     
     const response = await fetch(url, {
       method,
