@@ -26,21 +26,23 @@ const SingularProjects = ({ onSelect, selectedItems }: SingularProjectsProps) =>
   const { toast } = useToast();
   const [projectData, setProjectData] = useState<Record<string, Record<string, string>>>({});
 
-  const { data: projects, isLoading, error } = useQuery({
+  const { data: response, isLoading, error } = useQuery({
     queryKey: ['singular-projects'],
     queryFn: async () => {
-      const response = await singularApiRequest('');  // Changed from 'compositions' to empty string
+      const response = await singularApiRequest('');
       if (!response.success) {
         throw new Error(response.error);
       }
-      return response.data as SingularProject[];
+      return response.data;
     },
   });
+
+  // Convert the response to an array if it's not already
+  const projects = Array.isArray(response) ? response : [response];
 
   const handleProjectSelect = (projectId: string, projectName: string) => {
     onSelect('grfx', projectName);
     
-    // Initialize project data if not exists
     if (!projectData[projectId]) {
       setProjectData(prev => ({
         ...prev,
@@ -61,7 +63,7 @@ const SingularProjects = ({ onSelect, selectedItems }: SingularProjectsProps) =>
 
   const handleUpdateData = async (projectId: string) => {
     const response = await singularApiRequest(
-      `compositions/${projectId}/data`,
+      `${projectId}/data`,
       'PUT',
       { data: projectData[projectId] }
     );
@@ -92,9 +94,13 @@ const SingularProjects = ({ onSelect, selectedItems }: SingularProjectsProps) =>
     );
   }
 
+  if (!projects?.length) {
+    return <div className="text-white">No projects found.</div>;
+  }
+
   return (
     <div className="space-y-4">
-      {projects?.map((project) => (
+      {projects.map((project) => (
         <Accordion key={project.id} type="single" collapsible>
           <AccordionItem value={project.id}>
             <AccordionTrigger
