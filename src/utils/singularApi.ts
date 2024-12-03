@@ -14,7 +14,7 @@ export const singularApiRequest = async (
   body?: any
 ): Promise<SingularApiResponse> => {
   const apiKey = getSingularApiKey();
-  
+
   if (!apiKey) {
     return {
       success: false,
@@ -25,7 +25,7 @@ export const singularApiRequest = async (
   try {
     const url = `https://app.singular.live/apiv2/controlapps/${apiKey}/control/${endpoint}`;
     console.log('Making request to URL:', url);
-    
+
     const response = await fetch(url, {
       method,
       headers: {
@@ -43,6 +43,7 @@ export const singularApiRequest = async (
 
     const data = await response.json();
     console.log('API Response:', data);
+
     return {
       success: true,
       data,
