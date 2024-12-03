@@ -29,7 +29,7 @@ const SingularProjects = ({ onSelect, selectedItems }: SingularProjectsProps) =>
   const { data: projects, isLoading, error } = useQuery({
     queryKey: ['singular-projects'],
     queryFn: async () => {
-      const response = await singularApiRequest('compositions');
+      const response = await singularApiRequest('');  // Changed from 'compositions' to empty string
       if (!response.success) {
         throw new Error(response.error);
       }
