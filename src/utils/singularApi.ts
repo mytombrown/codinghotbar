@@ -23,7 +23,7 @@ export const singularApiRequest = async (
   }
 
   try {
-    const url = `https://app.singular.live/apiv2/controlapps/${apiKey}/control/${endpoint}`;
+    const url = `https://app.singular.live/apiv2/controlapps/${apiKey}/model/${endpoint}`;
 
     console.log('Making request to URL:', url);
 
