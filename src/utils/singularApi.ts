@@ -68,3 +68,7 @@ export const singularApiRequest = async (
     };
   }
 };
+
+export const getCompositionData = async (compositionId: string): Promise<SingularApiResponse> => {
+  return singularApiRequest(`${compositionId}/data`);
+};

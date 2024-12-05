@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { singularApiRequest } from '../utils/singularApi';
+import { singularApiRequest, getCompositionData } from '../utils/singularApi';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { useToast } from './ui/use-toast';
@@ -45,14 +45,19 @@ const SingularProjects = ({ onSelect, selectedItems }: SingularProjectsProps) =>
   // Convert the response to an array if it's not already
   const projects = Array.isArray(response) ? response : [response];
 
-  const handleProjectSelect = (projectId: string, projectName: string) => {
+  const handleProjectSelect = async (projectId: string, projectName: string) => {
     onSelect('grfx', projectName);
     
-    if (!projectData[projectId]) {
-      setProjectData(prev => ({
-        ...prev,
-        [projectId]: {}
-      }));
+    try {
+      const compositionData = await getCompositionData(projectId);
+      if (compositionData.success && compositionData.data) {
+        setProjectData(prev => ({
+          ...prev,
+          [projectId]: compositionData.data
+        }));
+      }
+    } catch (error) {
+      console.error('Error fetching composition data:', error);
     }
   };
 
