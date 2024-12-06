@@ -3,6 +3,16 @@ import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/components/ui/use-toast";
 import { LowerThirdData } from '../types/menu';
 
+const convertTimeToSeconds = (timeStr: string) => {
+  const parts = timeStr.split(':');
+  if (parts.length === 2) {
+    const minutes = parts[0] ? parseInt(parts[0]) : 0;
+    const seconds = parseInt(parts[1]);
+    return minutes * 60 + seconds;
+  }
+  return 0;
+};
+
 export const useMenuState = (id?: string) => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -73,24 +83,40 @@ export const useMenuState = (id?: string) => {
   };
 
   const handleItemSelect = (categoryId: string, item: string, side?: 'L' | 'R') => {
-    const itemLabel = side ? `${item} ${side}` : item;
-    
+    if (categoryId === 'scte') {
+      const timeMatch = item.match(/(\d*:?\d+)/);
+      if (timeMatch) {
+        const timeStr = timeMatch[1];
+        const seconds = convertTimeToSeconds(timeStr);
+        console.log({
+          action: `Start/Stop Time signal (0x30)_Auto Stop in ${seconds}sec`,
+          actionCode: "SwitchSCTE",
+          changeable: true,
+          enabled: true,
+          note: "",
+          shortcut: "Alt/Option+Shift+A",
+          shortcutId: 6244,
+          uiAction: false
+        });
+      }
+    }
+
     setSelectedItems(prev => {
       if (categoryId === 'audio' || categoryId === 'music') {
         const currentItems = prev[categoryId] || [];
-        const itemExists = currentItems.includes(itemLabel);
+        const itemExists = currentItems.includes(item);
         
         return {
           ...prev,
           [categoryId]: itemExists
-            ? currentItems.filter(i => i !== itemLabel)
-            : [...currentItems, itemLabel]
+            ? currentItems.filter(i => i !== item)
+            : [...currentItems, item]
         };
       }
       
       return {
         ...prev,
-        [categoryId]: [itemLabel]
+        [categoryId]: [item]
       };
     });
   };
@@ -117,7 +143,7 @@ export const useMenuState = (id?: string) => {
   return {
     activeCategory,
     selectedItems,
-    setSelectedItems,  // Added this line to expose setSelectedItems
+    setSelectedItems,
     selectedSideItem,
     showSideItems,
     musicLevels,

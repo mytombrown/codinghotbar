@@ -79,55 +79,6 @@ const MenuSystem = () => {
     setShowSaveDialog(false);
   };
 
-  const convertTimeToSeconds = (timeStr: string) => {
-    const parts = timeStr.split(':');
-    if (parts.length === 2) {
-      const minutes = parts[0] ? parseInt(parts[0]) : 0;
-      const seconds = parseInt(parts[1]);
-      return minutes * 60 + seconds;
-    }
-    return 0;
-  };
-
-  const handleItemSelect = (categoryId: string, item: string, side?: 'L' | 'R') => {
-    if (categoryId === 'scte') {
-      const timeMatch = item.match(/(\d*:?\d+)/);
-      if (timeMatch) {
-        const timeStr = timeMatch[1];
-        const seconds = convertTimeToSeconds(timeStr);
-        console.log({
-          action: `Start/Stop Time signal (0x30)_Auto Stop in ${seconds}sec`,
-          actionCode: "SwitchSCTE",
-          changeable: true,
-          enabled: true,
-          note: "",
-          shortcut: "Alt/Option+Shift+A",
-          shortcutId: 6244,
-          uiAction: false
-        });
-      }
-    }
-
-    setSelectedItems(prev => {
-      if (categoryId === 'audio' || categoryId === 'music') {
-        const currentItems = prev[categoryId] || [];
-        const itemExists = currentItems.includes(item);
-        
-        return {
-          ...prev,
-          [categoryId]: itemExists
-            ? currentItems.filter(i => i !== item)
-            : [...currentItems, item]
-        };
-      }
-      
-      return {
-        ...prev,
-        [categoryId]: [item]
-      };
-    });
-  };
-
   return (
     <div className="min-h-screen bg-menu-dark p-8 flex">
       <div className="flex flex-col">
