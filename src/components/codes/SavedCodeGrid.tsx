@@ -37,7 +37,10 @@ const SavedCodeGrid = ({ savedCodes, onDoubleClick, onDeleteCode }: SavedCodeGri
   const getSourceActions = (data: Record<string, string[]>) => {
     const sourceItems = data['source'] || [];
     return sourceItems.map(source => {
-      const sourceNumber = source.split(' ')[1];
+      // Extract the number after "Source " using a regular expression
+      const match = source.match(/Source (\d+)/);
+      const sourceNumber = match ? match[1] : '1';
+      
       return {
         action: `Source ${sourceNumber} to PGM`,
         actionCode: `Source${sourceNumber}ToPgm`,
