@@ -60,7 +60,7 @@ const SavedCodeGrid = ({ savedCodes, onDoubleClick, onDeleteCode }: SavedCodeGri
         <div 
           {...provided.droppableProps}
           ref={provided.innerRef}
-          className="grid grid-cols-6 gap-2"
+          className="grid grid-cols-6 gap-4"
         >
           {savedCodes.map((code, index) => (
             <Draggable key={code.id} draggableId={code.id} index={index}>
@@ -74,11 +74,11 @@ const SavedCodeGrid = ({ savedCodes, onDoubleClick, onDeleteCode }: SavedCodeGri
                     <HoverCardTrigger asChild>
                       <motion.div
                         onDoubleClick={() => onDoubleClick(code.id)}
-                        className="aspect-square p-2 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
+                        className="aspect-square p-4 rounded-lg backdrop-blur-sm transition-all duration-300 bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight cursor-move"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
-                        <div className="flex justify-end">
+                        <div className="flex justify-end mb-2">
                           <Button
                             variant="ghost"
                             size="icon"
@@ -91,14 +91,14 @@ const SavedCodeGrid = ({ savedCodes, onDoubleClick, onDeleteCode }: SavedCodeGri
                             <Trash2 className="h-3 w-3" />
                           </Button>
                         </div>
-                        <div className="w-12 h-12 mx-auto mb-1 rounded-md overflow-hidden">
+                        <div className="w-full h-32 mx-auto mb-3 rounded-md overflow-hidden">
                           <img
                             src={getCodeThumbnail(code.data)}
                             alt={code.name}
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <span className="text-xs font-medium tracking-wide text-white block text-center truncate">
+                        <span className="text-sm font-medium tracking-wide text-white block text-center truncate">
                           {code.name}
                         </span>
                       </motion.div>
