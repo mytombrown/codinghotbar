@@ -2,16 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/components/ui/use-toast";
 import { LowerThirdData } from '../types/menu';
-
-const convertTimeToSeconds = (timeStr: string) => {
-  const parts = timeStr.split(':');
-  if (parts.length === 2) {
-    const minutes = parts[0] ? parseInt(parts[0]) : 0;
-    const seconds = parseInt(parts[1]);
-    return minutes * 60 + seconds;
-  }
-  return 0;
-};
+import { convertTimeToSeconds, createSCTEAction } from '../utils/scteUtils';
 
 export const useMenuState = (id?: string) => {
   const navigate = useNavigate();
@@ -29,20 +20,12 @@ export const useMenuState = (id?: string) => {
 
     const savedCodes = JSON.parse(localStorage.getItem("saved-codes") || "[]");
     const newCode = {
-      id: id || Date.now().toString(),
+      id: Date.now().toString(),
       name,
       data: selectedItems,
     };
-
-    if (id) {
-      const index = savedCodes.findIndex((c: any) => c.id === id);
-      if (index !== -1) {
-        savedCodes[index] = newCode;
-      }
-    } else {
-      savedCodes.push(newCode);
-    }
-
+    
+    savedCodes.push(newCode);
     localStorage.setItem("saved-codes", JSON.stringify(savedCodes));
     toast({
       title: "Success",
@@ -88,16 +71,7 @@ export const useMenuState = (id?: string) => {
       if (timeMatch) {
         const timeStr = timeMatch[1];
         const seconds = convertTimeToSeconds(timeStr);
-        console.log({
-          action: `Start/Stop Time signal (0x30)_Auto Stop in ${seconds}sec`,
-          actionCode: "SwitchSCTE",
-          changeable: true,
-          enabled: true,
-          note: "",
-          shortcut: "Alt/Option+Shift+A",
-          shortcutId: 6244,
-          uiAction: false
-        });
+        console.log(createSCTEAction(seconds));
       }
     }
 
