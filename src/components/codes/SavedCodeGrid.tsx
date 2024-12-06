@@ -16,6 +16,17 @@ interface SavedCode {
   data: Record<string, string[]>;
 }
 
+interface SourceAction {
+  action: string;
+  actionCode: string;
+  changeable: boolean;
+  enabled: boolean;
+  note: string;
+  shortcut: string;
+  shortcutId: number;
+  uiAction: boolean;
+}
+
 interface SavedCodeGridProps {
   savedCodes: SavedCode[];
   onDoubleClick: (id: string) => void;
@@ -23,6 +34,23 @@ interface SavedCodeGridProps {
 }
 
 const SavedCodeGrid = ({ savedCodes, onDoubleClick, onDeleteCode }: SavedCodeGridProps) => {
+  const getSourceActions = (data: Record<string, string[]>) => {
+    const sourceItems = data['source'] || [];
+    return sourceItems.map(source => {
+      const sourceNumber = source.split(' ')[1];
+      return {
+        action: `Source ${sourceNumber} to PGM`,
+        actionCode: `Source${sourceNumber}ToPgm`,
+        changeable: true,
+        enabled: true,
+        note: "",
+        shortcut: "Ctrl+A",
+        shortcutId: 6512,
+        uiAction: false
+      };
+    });
+  };
+
   return (
     <Droppable droppableId="codes" direction="horizontal">
       {(provided) => (
@@ -87,6 +115,20 @@ const SavedCodeGrid = ({ savedCodes, onDoubleClick, onDeleteCode }: SavedCodeGri
                               </div>
                             )
                           ))}
+                          {code.data.source && code.data.source.length > 0 && (
+                            <div className="mt-4">
+                              <div className="font-medium">API Actions:</div>
+                              {getSourceActions(code.data).map((action, idx) => (
+                                <div key={idx} className="mt-2 p-2 bg-slate-100 rounded-md">
+                                  <div className="text-xs font-mono">
+                                    <div>Action: {action.action}</div>
+                                    <div>Code: {action.actionCode}</div>
+                                    <div>Shortcut: {action.shortcut}</div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </HoverCardContent>
