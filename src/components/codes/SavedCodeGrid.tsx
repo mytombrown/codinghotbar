@@ -34,10 +34,19 @@ interface SavedCodeGridProps {
 }
 
 const SavedCodeGrid = ({ savedCodes, onDoubleClick, onDeleteCode }: SavedCodeGridProps) => {
+  const convertTimeToSeconds = (timeStr: string) => {
+    const parts = timeStr.split(':');
+    if (parts.length === 2) {
+      const minutes = parts[0] ? parseInt(parts[0]) : 0;
+      const seconds = parseInt(parts[1]);
+      return minutes * 60 + seconds;
+    }
+    return 0;
+  };
+
   const getSourceActions = (data: Record<string, string[]>) => {
     const sourceItems = data['source'] || [];
     return sourceItems.map(source => {
-      // Extract the number after "Source " using a regular expression
       const match = source.match(/Source (\d+)/);
       const sourceNumber = match ? match[1] : '1';
       
@@ -52,6 +61,28 @@ const SavedCodeGrid = ({ savedCodes, onDoubleClick, onDeleteCode }: SavedCodeGri
         uiAction: false
       };
     });
+  };
+
+  const getSCTEActions = (data: Record<string, string[]>) => {
+    const scteItems = data['scte'] || [];
+    return scteItems.map(item => {
+      const timeMatch = item.match(/(\d*:?\d+)/);
+      if (timeMatch) {
+        const timeStr = timeMatch[1];
+        const seconds = convertTimeToSeconds(timeStr);
+        return {
+          action: `Start/Stop Time signal (0x30)_Auto Stop in ${seconds}sec`,
+          actionCode: "SwitchSCTE",
+          changeable: true,
+          enabled: true,
+          note: "",
+          shortcut: "Alt/Option+Shift+A",
+          shortcutId: 6244,
+          uiAction: false
+        };
+      }
+      return null;
+    }).filter(Boolean);
   };
 
   return (
@@ -120,8 +151,22 @@ const SavedCodeGrid = ({ savedCodes, onDoubleClick, onDeleteCode }: SavedCodeGri
                           ))}
                           {code.data.source && code.data.source.length > 0 && (
                             <div className="mt-4">
-                              <div className="font-medium">API Actions:</div>
+                              <div className="font-medium">Source API Actions:</div>
                               {getSourceActions(code.data).map((action, idx) => (
+                                <div key={idx} className="mt-2 p-2 bg-slate-100 rounded-md">
+                                  <div className="text-xs font-mono">
+                                    <div>Action: {action.action}</div>
+                                    <div>Code: {action.actionCode}</div>
+                                    <div>Shortcut: {action.shortcut}</div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                          {code.data.scte && getSCTEActions(code.data).length > 0 && (
+                            <div className="mt-4">
+                              <div className="font-medium">SCTE API Actions:</div>
+                              {getSCTEActions(code.data).map((action, idx) => (
                                 <div key={idx} className="mt-2 p-2 bg-slate-100 rounded-md">
                                   <div className="text-xs font-mono">
                                     <div>Action: {action.action}</div>
