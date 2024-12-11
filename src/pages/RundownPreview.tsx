@@ -17,10 +17,10 @@ const RundownPreview = () => {
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
 
-    const items = Array.from(items);
-    const [reorderedItem] = items.splice(result.source.index, 1);
-    items.splice(result.destination.index, 0, reorderedItem);
-    setItems(items);
+    const newItems = Array.from(items);
+    const [reorderedItem] = newItems.splice(result.source.index, 1);
+    newItems.splice(result.destination.index, 0, reorderedItem);
+    setItems(newItems);
   };
 
   return (
