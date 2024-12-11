@@ -59,9 +59,9 @@ const RundownPreview = () => {
       </div>
 
       {/* Main Content */}
-      <div className="grid grid-cols-12 gap-4 p-4">
+      <div className="grid grid-cols-2 gap-4 p-4">
         {/* Preview */}
-        <div className="col-span-5">
+        <div className="col-span-1">
           <div className="bg-[#141414] rounded-lg p-4 h-[300px]">
             <div className="flex items-center gap-2 mb-4">
               <span className="h-2 w-2 bg-green-500 rounded-full"></span>
@@ -72,7 +72,7 @@ const RundownPreview = () => {
         </div>
 
         {/* Program */}
-        <div className="col-span-7">
+        <div className="col-span-1">
           <div className="bg-[#141414] rounded-lg p-4 h-[300px]">
             <div className="flex items-center gap-2 mb-4">
               <span className="h-2 w-2 bg-red-500 rounded-full"></span>
