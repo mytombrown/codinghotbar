@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { getCodeThumbnail } from '../utils/thumbnailUtils';
-import { ChevronLeft, Trash2 } from 'lucide-react';
+import { ChevronLeft, Trash2, GripVertical } from 'lucide-react';
 
 interface RundownItem {
   rundownId: string;
@@ -70,9 +70,16 @@ const RundownPreview = () => {
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        className="bg-white rounded-lg shadow-sm p-6 flex items-center gap-6 cursor-move hover:shadow-md transition-shadow"
+                        className="bg-white rounded-lg shadow-sm p-6 flex items-center gap-6"
                       >
+                        {/* Drag Handle */}
+                        <div
+                          {...provided.dragHandleProps}
+                          className="cursor-move text-gray-400 hover:text-gray-600"
+                        >
+                          <GripVertical className="h-5 w-5" />
+                        </div>
+
                         {/* Thumbnail */}
                         <div className="w-24 h-16 rounded-md overflow-hidden bg-[#9b87f5]/10 flex-shrink-0">
                           <img
