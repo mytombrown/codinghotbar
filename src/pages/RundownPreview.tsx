@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
 import { getCodeThumbnail } from '../utils/thumbnailUtils';
-import { Settings } from 'lucide-react';
+import { ChevronLeft, Home } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 interface RundownItem {
@@ -37,24 +37,28 @@ const RundownPreview = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#1A1A1A] text-white">
+    <div className="min-h-screen bg-[#1A1A1A]">
       {/* Header */}
       <div className="bg-[#141414] border-b border-[#2A2A2A] px-4 py-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-2">
-              <span className="h-2 w-2 bg-red-500 rounded-full animate-pulse"></span>
-              <span className="font-medium">LIVE</span>
-            </span>
-            <span className="font-semibold">Broadcast Control</span>
-            <span className="text-gray-400">00:15:23</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="icon">
-              <Settings className="h-5 w-5" />
-            </Button>
-            <Button variant="destructive">End Broadcast</Button>
-          </div>
+        <div className="flex items-center gap-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/codes")}
+            className="hover:bg-white/20"
+          >
+            <ChevronLeft className="h-5 w-5 text-white" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/codes")}
+            className="hover:bg-white/20"
+          >
+            <Home className="h-5 w-5 text-white" />
+          </Button>
+          <span className="font-semibold text-white">Broadcast Control</span>
+          <span className="text-gray-400">00:15:23</span>
         </div>
       </div>
 
