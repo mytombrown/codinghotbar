@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,16 @@ interface RundownItem {
 
 const RundownPreview = () => {
   const navigate = useNavigate();
-  const [items, setItems] = React.useState<RundownItem[]>([]);
+  const [items, setItems] = useState<RundownItem[]>([]);
+
+  useEffect(() => {
+    const savedCodes = JSON.parse(localStorage.getItem("saved-codes") || "[]");
+    const hotbarItems = savedCodes.map((code: any) => ({
+      ...code,
+      rundownId: `${Date.now()}-${Math.random()}`
+    }));
+    setItems(hotbarItems);
+  }, []);
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return;
