@@ -20,7 +20,7 @@ const Hotbar = ({ items, showHotbar }: HotbarProps) => {
       <div className="max-w-[95%] mx-auto">
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-white text-xl font-bold">
-            Hotbar ({items.length}/20)
+            Rundown ({items.length}/20)
           </h2>
         </div>
         <Droppable droppableId="hotbar" direction="horizontal">
