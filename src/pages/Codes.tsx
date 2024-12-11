@@ -38,6 +38,10 @@ const Codes = () => {
     navigate("/new-code");
   };
 
+  const handleRundownClick = () => {
+    navigate("/rundown-preview");
+  };
+
   const handleDoubleClick = (id: string) => {
     navigate(`/edit-code/${id}`);
   };
@@ -102,10 +106,16 @@ const Codes = () => {
               New
             </Button>
             <Button 
+              onClick={handleRundownClick}
+              className="bg-purple-600 hover:bg-purple-700"
+            >
+              Rundown
+            </Button>
+            <Button 
               onClick={() => setShowHotbar(!showHotbar)}
               className="bg-purple-600 hover:bg-purple-700"
             >
-              {showHotbar ? 'Hide Hotbar' : 'Show Hotbar'}
+              {showHotbar ? 'Hide Rundown' : 'Show Rundown'}
             </Button>
             <Button
               onClick={() => setShowSettings(!showSettings)}
