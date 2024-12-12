@@ -19,26 +19,24 @@ const RundownPreview = () => {
 
   // Load rundown items from localStorage on component mount
   useEffect(() => {
-    const savedRundown = localStorage.getItem("rundown-items");
+    const savedRundown = localStorage.getItem("hotbar-items");
     if (savedRundown) {
-      setItems(JSON.parse(savedRundown));
-    } else {
-      // If no rundown exists, initialize with all saved codes
-      const savedCodes = JSON.parse(localStorage.getItem("saved-codes") || "[]");
-      const initialRundown = savedCodes.map((code: any, index: number) => ({
-        ...code,
-        rundownId: `${Date.now()}-${Math.random()}`,
+      const hotbarItems = JSON.parse(savedRundown);
+      const rundownItems = hotbarItems.map((item: RundownItem, index: number) => ({
+        ...item,
         status: index === 0 ? 'LIVE' : index === 1 ? 'NEXT' : 'READY',
         duration: ['2:30', '1:45', '3:15', '2:00'][index % 4],
       }));
-      setItems(initialRundown);
-      localStorage.setItem("rundown-items", JSON.stringify(initialRundown));
+      setItems(rundownItems);
+      localStorage.setItem("rundown-items", JSON.stringify(rundownItems));
     }
   }, []);
 
   // Save rundown items to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("rundown-items", JSON.stringify(items));
+    // Also update hotbar items to keep them in sync
+    localStorage.setItem("hotbar-items", JSON.stringify(items));
   }, [items]);
 
   const handleDragEnd = (result: any) => {
@@ -170,5 +168,3 @@ const RundownPreview = () => {
     </div>
   );
 };
-
-export default RundownPreview;

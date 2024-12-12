@@ -31,7 +31,10 @@ const Codes = () => {
     const saved = localStorage.getItem("saved-codes");
     return saved ? JSON.parse(saved) : [];
   });
-  const [hotbarItems, setHotbarItems] = useState<HotbarItem[]>([]);
+  const [hotbarItems, setHotbarItems] = useState<HotbarItem[]>(() => {
+    const saved = localStorage.getItem("hotbar-items");
+    return saved ? JSON.parse(saved) : [];
+  });
   const [codeToDelete, setCodeToDelete] = useState<SavedCode | null>(null);
 
   const handleNewCode = () => {
@@ -39,6 +42,8 @@ const Codes = () => {
   };
 
   const handleRundownClick = () => {
+    // Save hotbar items to rundown-items when navigating to rundown preview
+    localStorage.setItem("rundown-items", JSON.stringify(hotbarItems));
     navigate("/rundown-preview");
   };
 
@@ -82,7 +87,9 @@ const Codes = () => {
           ...code,
           rundownId: `${Date.now()}-${Math.random()}`
         };
-        setHotbarItems(prev => [...prev, newHotbarItem]);
+        const newHotbarItems = [...hotbarItems, newHotbarItem];
+        setHotbarItems(newHotbarItems);
+        localStorage.setItem("hotbar-items", JSON.stringify(newHotbarItems));
       }
     }
 
@@ -91,6 +98,7 @@ const Codes = () => {
       const [reorderedItem] = items.splice(result.source.index, 1);
       items.splice(result.destination.index, 0, reorderedItem);
       setHotbarItems(items);
+      localStorage.setItem("hotbar-items", JSON.stringify(items));
     }
   };
 
