@@ -19,17 +19,13 @@ const AudioItems = ({ selectedSideItem, items, selectedItems, onItemSelect }: Au
     const isRSelected = selectedItems[selectedSideItem]?.includes(itemR);
 
     if (!isLSelected && !isRSelected) {
-      onItemSelect(selectedSideItem, item, 'L');
-      onItemSelect(selectedSideItem, item, 'R');
+      // If neither is selected, select both
+      onItemSelect(selectedSideItem, itemL);
+      onItemSelect(selectedSideItem, itemR);
     } else if (isLSelected && isRSelected) {
-      onItemSelect(selectedSideItem, item, 'L');
-      onItemSelect(selectedSideItem, item, 'R');
-    } else {
-      if (isLSelected) {
-        onItemSelect(selectedSideItem, item, 'R');
-      } else {
-        onItemSelect(selectedSideItem, item, 'L');
-      }
+      // If both are selected, deselect both
+      onItemSelect(selectedSideItem, itemL);
+      onItemSelect(selectedSideItem, itemR);
     }
   };
 
@@ -40,24 +36,26 @@ const AudioItems = ({ selectedSideItem, items, selectedItems, onItemSelect }: Au
     return (
       <div key={item.id} className="flex gap-1">
         <motion.button
-          onClick={() => onItemSelect(selectedSideItem, item.label, 'L')}
-          className={`flex-1 p-6 rounded-l-lg backdrop-blur-sm transition-all duration-300 ${
+          onClick={() => onItemSelect(selectedSideItem, `${item.label} L`)}
+          className={cn(
+            "flex-1 p-6 rounded-l-lg backdrop-blur-sm transition-all duration-300",
             isLSelected
-              ? 'bg-menu-active text-white shadow-lg'
-              : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-          }`}
+              ? "bg-menu-active text-white shadow-lg"
+              : "bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight"
+          )}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
           <span className="text-sm font-medium tracking-wide">{item.label} L</span>
         </motion.button>
         <motion.button
-          onClick={() => onItemSelect(selectedSideItem, item.label, 'R')}
-          className={`flex-1 p-6 rounded-r-lg backdrop-blur-sm transition-all duration-300 ${
+          onClick={() => onItemSelect(selectedSideItem, `${item.label} R`)}
+          className={cn(
+            "flex-1 p-6 rounded-r-lg backdrop-blur-sm transition-all duration-300",
             isRSelected
-              ? 'bg-menu-active text-white shadow-lg'
-              : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
-          }`}
+              ? "bg-menu-active text-white shadow-lg"
+              : "bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight"
+          )}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
