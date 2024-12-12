@@ -80,7 +80,7 @@ export const sideMenuItems: SideMenuItem[] = [
   },
   { 
     id: 'me', 
-    label: 'ME',
+    label: 'Custom Video',
     items: [
       {
         id: 'me1',
