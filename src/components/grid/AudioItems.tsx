@@ -20,16 +20,16 @@ const AudioItems = ({ selectedSideItem, items, selectedItems, onItemSelect }: Au
 
     if (!isLSelected && !isRSelected) {
       // If neither is selected, select both
-      onItemSelect(selectedSideItem, item, 'L');
-      onItemSelect(selectedSideItem, item, 'R');
+      onItemSelect(selectedSideItem, itemL);
+      onItemSelect(selectedSideItem, itemR);
     } else if (isLSelected && isRSelected) {
       // If both are selected, deselect both
-      onItemSelect(selectedSideItem, item, 'L');
-      onItemSelect(selectedSideItem, item, 'R');
+      onItemSelect(selectedSideItem, itemL);
+      onItemSelect(selectedSideItem, itemR);
     } else {
       // If one is selected, select the other one
-      if (!isLSelected) onItemSelect(selectedSideItem, item, 'L');
-      if (!isRSelected) onItemSelect(selectedSideItem, item, 'R');
+      if (!isLSelected) onItemSelect(selectedSideItem, itemL);
+      if (!isRSelected) onItemSelect(selectedSideItem, itemR);
     }
   };
 
@@ -42,7 +42,7 @@ const AudioItems = ({ selectedSideItem, items, selectedItems, onItemSelect }: Au
     return (
       <div key={item.id} className="flex gap-1">
         <motion.button
-          onClick={() => onItemSelect(selectedSideItem, item.label, 'L')}
+          onClick={() => onItemSelect(selectedSideItem, itemL)}
           className={cn(
             "flex-1 p-6 rounded-l-lg backdrop-blur-sm transition-all duration-300",
             isLSelected
@@ -55,7 +55,7 @@ const AudioItems = ({ selectedSideItem, items, selectedItems, onItemSelect }: Au
           <span className="text-sm font-medium tracking-wide">{item.label} L</span>
         </motion.button>
         <motion.button
-          onClick={() => onItemSelect(selectedSideItem, item.label, 'R')}
+          onClick={() => onItemSelect(selectedSideItem, itemR)}
           className={cn(
             "flex-1 p-6 rounded-r-lg backdrop-blur-sm transition-all duration-300",
             isRSelected
