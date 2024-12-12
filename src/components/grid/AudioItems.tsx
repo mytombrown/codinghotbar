@@ -20,23 +20,29 @@ const AudioItems = ({ selectedSideItem, items, selectedItems, onItemSelect }: Au
 
     if (!isLSelected && !isRSelected) {
       // If neither is selected, select both
-      onItemSelect(selectedSideItem, itemL);
-      onItemSelect(selectedSideItem, itemR);
+      onItemSelect(selectedSideItem, item, 'L');
+      onItemSelect(selectedSideItem, item, 'R');
     } else if (isLSelected && isRSelected) {
       // If both are selected, deselect both
-      onItemSelect(selectedSideItem, itemL);
-      onItemSelect(selectedSideItem, itemR);
+      onItemSelect(selectedSideItem, item, 'L');
+      onItemSelect(selectedSideItem, item, 'R');
+    } else {
+      // If one is selected, select the other one
+      if (!isLSelected) onItemSelect(selectedSideItem, item, 'L');
+      if (!isRSelected) onItemSelect(selectedSideItem, item, 'R');
     }
   };
 
   return items?.map((item) => {
-    const isLSelected = selectedItems[selectedSideItem]?.includes(`${item.label} L`);
-    const isRSelected = selectedItems[selectedSideItem]?.includes(`${item.label} R`);
+    const itemL = `${item.label} L`;
+    const itemR = `${item.label} R`;
+    const isLSelected = selectedItems[selectedSideItem]?.includes(itemL);
+    const isRSelected = selectedItems[selectedSideItem]?.includes(itemR);
     
     return (
       <div key={item.id} className="flex gap-1">
         <motion.button
-          onClick={() => onItemSelect(selectedSideItem, `${item.label} L`)}
+          onClick={() => onItemSelect(selectedSideItem, item.label, 'L')}
           className={cn(
             "flex-1 p-6 rounded-l-lg backdrop-blur-sm transition-all duration-300",
             isLSelected
@@ -49,7 +55,7 @@ const AudioItems = ({ selectedSideItem, items, selectedItems, onItemSelect }: Au
           <span className="text-sm font-medium tracking-wide">{item.label} L</span>
         </motion.button>
         <motion.button
-          onClick={() => onItemSelect(selectedSideItem, `${item.label} R`)}
+          onClick={() => onItemSelect(selectedSideItem, item.label, 'R')}
           className={cn(
             "flex-1 p-6 rounded-r-lg backdrop-blur-sm transition-all duration-300",
             isRSelected
