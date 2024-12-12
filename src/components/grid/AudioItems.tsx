@@ -8,13 +8,13 @@ interface AudioItemsProps {
   selectedSideItem: string;
   items: SideMenuItem['items'];
   selectedItems: Record<string, string[]>;
-  onItemSelect: (categoryId: string, item: string, side?: 'L' | 'R') => void;
+  onItemSelect: (categoryId: string, item: string) => void;
 }
 
 const AudioItems = ({ selectedSideItem, items, selectedItems, onItemSelect }: AudioItemsProps) => {
-  const handleLinkClick = (item: string) => {
-    const itemL = `${item} L`;
-    const itemR = `${item} R`;
+  const handleLinkClick = (itemLabel: string) => {
+    const itemL = `${itemLabel} L`;
+    const itemR = `${itemLabel} R`;
     const isLSelected = selectedItems[selectedSideItem]?.includes(itemL);
     const isRSelected = selectedItems[selectedSideItem]?.includes(itemR);
 
