@@ -51,8 +51,6 @@ export const sideMenuItems: SideMenuItem[] = [
       hasLR: true
     }))
   },
-  { id: 'ptz', label: 'PTZ' },
-  { id: 'grfx', label: 'GRFX' },
   { 
     id: 'clips', 
     label: 'CLIPS',
@@ -100,8 +98,9 @@ export const sideMenuItems: SideMenuItem[] = [
       }
     ]
   },
+  { id: 'ptz', label: 'PTZ' },
+  { id: 'grfx', label: 'GRFX' },
   { id: 'l3', label: 'L3' },
-  { id: 'ext-dev', label: 'EXT DEV' },
   { 
     id: 'music', 
     label: 'MUSIC',
@@ -110,5 +109,6 @@ export const sideMenuItems: SideMenuItem[] = [
       label: `Track ${i + 1}`,
       hasLevel: true
     }))
-  }
+  },
+  { id: 'ext-dev', label: 'EXT DEV' }
 ];
