@@ -168,3 +168,5 @@ const RundownPreview = () => {
     </div>
   );
 };
+
+export default RundownPreview;
