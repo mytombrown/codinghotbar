@@ -19,7 +19,7 @@ export const menuItems: MenuItem[] = [
   {
     id: 'grfx',
     label: 'GRFX',
-    items: [], // Empty array as items will be fetched from Singular API
+    items: [],
   },
 ];
 
