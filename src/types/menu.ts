@@ -9,6 +9,12 @@ export interface LowerThirdData {
   text?: string;
 }
 
+export interface MEBox {
+  id: string;
+  label: string;
+  selectedSource: any;
+}
+
 export interface SideMenuItem {
   id: string;
   label: string;
@@ -22,5 +28,7 @@ export interface SideMenuItem {
     lowerThirds?: LowerThirdData[];
     type?: string;
     selectedSource?: any;
+    layout?: '2-split' | '3-split' | '4-grid';
+    boxes?: MEBox[];
   }>;
 }
