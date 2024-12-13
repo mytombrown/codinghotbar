@@ -85,49 +85,14 @@ export const sideMenuItems: SideMenuItem[] = [
     label: 'Custom Video',
     items: [
       {
-        id: 'me0',
-        label: 'Single',
-        type: 'box',
-        layout: '1-box',
-        previewImage: '/lovable-uploads/be6ae28c-2563-4e5b-a30b-5593635e2bc6.png',
-        boxes: [
-          { id: 'box1', label: 'Box 1', selectedSource: null }
-        ]
-      },
-      {
         id: 'me1',
-        label: 'Split 2',
+        label: '1:1',
         type: 'box',
         layout: '2-split',
         previewImage: '/lovable-uploads/c37b6aa6-484e-4478-a4e3-60a775c4b878.png',
         boxes: [
           { id: 'box1', label: 'Box 1', selectedSource: null },
           { id: 'box2', label: 'Box 2', selectedSource: null }
-        ]
-      },
-      {
-        id: 'me2',
-        label: 'Split 3',
-        type: 'box',
-        layout: '3-split',
-        previewImage: '/lovable-uploads/1fcb3c42-b843-4497-b6ba-aab8940ea1a1.png',
-        boxes: [
-          { id: 'box1', label: 'Box 1', selectedSource: null },
-          { id: 'box2', label: 'Box 2', selectedSource: null },
-          { id: 'box3', label: 'Box 3', selectedSource: null }
-        ]
-      },
-      {
-        id: 'me3',
-        label: 'Grid 4',
-        type: 'box',
-        layout: '4-grid',
-        previewImage: '/lovable-uploads/d9aed78c-a0a5-410e-bcc9-c0e31153ea2c.png',
-        boxes: [
-          { id: 'box1', label: 'Box 1', selectedSource: null },
-          { id: 'box2', label: 'Box 2', selectedSource: null },
-          { id: 'box3', label: 'Box 3', selectedSource: null },
-          { id: 'box4', label: 'Box 4', selectedSource: null }
         ]
       }
     ]
