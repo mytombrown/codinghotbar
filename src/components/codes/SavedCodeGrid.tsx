@@ -122,11 +122,11 @@ const SavedCodeGrid = ({ savedCodes, onDoubleClick, onDeleteCode }: SavedCodeGri
                             <Trash2 className="h-3 w-3" />
                           </Button>
                         </div>
-                        <div className="w-full h-32 mx-auto mb-3 rounded-md overflow-hidden">
+                        <div className="w-full aspect-video mx-auto mb-3 rounded-md overflow-hidden">
                           <img
                             src={getCodeThumbnail(code.data)}
                             alt={code.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                           />
                         </div>
                         <span className="text-sm font-medium tracking-wide text-white block text-center truncate">
