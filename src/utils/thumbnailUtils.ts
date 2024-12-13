@@ -10,7 +10,7 @@ export const getCodeThumbnail = (data: Record<string, string[]>) => {
     );
 
     if (meBoxes.some(box => box?.selectedSource)) {
-      return 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6';
+      return '/lovable-uploads/be6ae28c-2563-4e5b-a30b-5593635e2bc6.png';
     }
   }
   
