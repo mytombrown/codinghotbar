@@ -10,24 +10,26 @@ const MESourcesDisplay = ({ meData }: MESourcesDisplayProps) => {
     return null;
   }
 
+  const meBoxes = sideMenuItems
+    .find(menu => menu.id === 'me')
+    ?.items || [];
+
   return (
     <div className="space-y-2">
       <h4 className="text-sm font-semibold">Custom Video Sources</h4>
-      <div className="text-sm">
-        {meData['me'].map((meItem, index) => {
-          const meBox = sideMenuItems
-            .find(menu => menu.id === 'me')
-            ?.items?.find(box => box.label === meItem);
-
+      <div className="text-sm grid grid-cols-2 gap-4">
+        {meBoxes.map((meBox, index) => {
+          const isSelected = meData['me'].includes(meBox.label);
+          
           return (
-            <div key={index} className="flex items-center gap-2 mb-1">
-              <span className="font-medium">{meBox?.label}:</span>
-              {meBox?.selectedSource ? (
+            <div key={index} className={`p-2 rounded ${isSelected ? 'bg-blue-950/30' : 'bg-slate-950/30'}`}>
+              <div className="font-medium">{meBox.label}</div>
+              {isSelected ? (
                 <span className="text-muted-foreground">
-                  {meBox.selectedSource.label}
+                  {meBox.selectedSource?.label || 'No source selected'}
                 </span>
               ) : (
-                <span className="text-muted-foreground italic">No source selected</span>
+                <span className="text-muted-foreground italic">Not in use</span>
               )}
             </div>
           );
