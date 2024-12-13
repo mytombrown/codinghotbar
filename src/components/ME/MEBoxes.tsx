@@ -1,6 +1,11 @@
 import { motion } from 'framer-motion';
 import { cn } from "@/lib/utils";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from '../ui/dropdown-menu';
 
 interface MEBoxesProps {
   items: any[];
@@ -75,7 +80,7 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
                       </div>
                     </motion.button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent className="w-56 bg-menu-darker text-white">
                     {sideMenuItems
                       .find(menu => menu.id === 'source')
                       ?.items?.map((source: any) => (
@@ -85,6 +90,7 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
                             box.selectedSource = source;
                             onItemSelect('me', item.label);
                           }}
+                          className="cursor-pointer hover:bg-menu-active"
                         >
                           {source.label}
                         </DropdownMenuItem>
