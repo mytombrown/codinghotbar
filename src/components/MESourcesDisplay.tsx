@@ -17,16 +17,28 @@ const MESourcesDisplay = ({ meData }: MESourcesDisplayProps) => {
   return (
     <div className="space-y-2">
       <h4 className="text-sm font-semibold">Custom Video Sources</h4>
-      <div className="text-sm grid grid-cols-2 gap-4">
+      <div className="text-sm space-y-4">
         {meBoxes.map((meBox, index) => {
           const isSelected = meData['me'].includes(meBox.label);
           
+          if (!isSelected) return null;
+
           return (
-            <div key={index} className={`p-2 rounded ${isSelected ? 'bg-blue-950/30' : 'bg-slate-950/30'}`}>
+            <div key={index} className="space-y-2">
               <div className="font-medium">{meBox.label}</div>
-              <span className="text-muted-foreground">
-                {meBox.selectedSource?.label || 'Not in use'}
-              </span>
+              <div className="grid grid-cols-2 gap-2">
+                {meBox.boxes.map((box: any, boxIndex: number) => (
+                  <div 
+                    key={boxIndex}
+                    className="p-2 rounded bg-slate-950/30"
+                  >
+                    <div className="font-medium">{box.label}</div>
+                    <span className="text-muted-foreground">
+                      {box.selectedSource?.label || 'Not in use'}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           );
         })}
