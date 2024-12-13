@@ -3,8 +3,13 @@ import { sideMenuItems } from '../data/menuItems';
 export const getCodeThumbnail = (data: Record<string, string[]>) => {
   // First check ME/Custom Video sources
   if (data.me && data.me.length > 0) {
-    // Return a custom video layout thumbnail
-    return '/lovable-uploads/09033254-1f55-429f-9954-5e61252f8132.png';
+    const meBox = sideMenuItems
+      .find(menu => menu.id === 'me')
+      ?.items?.find(box => box.label === data.me[0]);
+
+    if (meBox?.selectedSource) {
+      return '/lovable-uploads/09033254-1f55-429f-9954-5e61252f8132.png';
+    }
   }
   
   // Fallback to direct source if no ME source found
