@@ -91,8 +91,8 @@ export const sideMenuItems: SideMenuItem[] = [
         layout: '2-split',
         previewImage: '/lovable-uploads/6a821d0d-80f9-4e41-a715-0bf511a50790.png',
         boxes: [
-          { id: 'box1', label: 'Box 1', selectedSource: null },
-          { id: 'box2', label: 'Box 2', selectedSource: null }
+          { id: 'box1', label: 'Box 1' },
+          { id: 'box2', label: 'Box 2' }
         ]
       }
     ]
