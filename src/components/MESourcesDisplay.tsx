@@ -24,13 +24,9 @@ const MESourcesDisplay = ({ meData }: MESourcesDisplayProps) => {
           return (
             <div key={index} className={`p-2 rounded ${isSelected ? 'bg-blue-950/30' : 'bg-slate-950/30'}`}>
               <div className="font-medium">{meBox.label}</div>
-              {isSelected && meBox.selectedSource ? (
-                <span className="text-muted-foreground">
-                  {meBox.selectedSource.label}
-                </span>
-              ) : (
-                <span className="text-muted-foreground italic">Not in use</span>
-              )}
+              <span className="text-muted-foreground">
+                {meBox.selectedSource?.label || 'Not in use'}
+              </span>
             </div>
           );
         })}
