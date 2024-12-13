@@ -12,7 +12,7 @@ const MESourcesDisplay = ({ meData }: MESourcesDisplayProps) => {
 
   return (
     <div className="space-y-2">
-      <h4 className="text-sm font-semibold">ME Sources</h4>
+      <h4 className="text-sm font-semibold">Custom Video Sources</h4>
       <div className="text-sm">
         {meData['me'].map((meItem, index) => {
           const meBox = sideMenuItems
@@ -22,10 +22,12 @@ const MESourcesDisplay = ({ meData }: MESourcesDisplayProps) => {
           return (
             <div key={index} className="flex items-center gap-2 mb-1">
               <span className="font-medium">{meBox?.label}:</span>
-              {meBox?.selectedSource && (
+              {meBox?.selectedSource ? (
                 <span className="text-muted-foreground">
                   {meBox.selectedSource.label}
                 </span>
+              ) : (
+                <span className="text-muted-foreground italic">No source selected</span>
               )}
             </div>
           );
