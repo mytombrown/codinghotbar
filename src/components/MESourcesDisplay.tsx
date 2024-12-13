@@ -20,14 +20,14 @@ const MESourcesDisplay = ({ meData }: MESourcesDisplayProps) => {
       <div className="text-sm grid grid-cols-2 gap-4">
         {meBoxes.map((meBox, index) => {
           const isSelected = meData['me'].includes(meBox.label);
-          const selectedSource = isSelected ? meBox.selectedSource : null;
+          const selectedSource = meBox.selectedSource;
           
           return (
             <div key={index} className={`p-2 rounded ${isSelected ? 'bg-blue-950/30' : 'bg-slate-950/30'}`}>
               <div className="font-medium">{meBox.label}</div>
               {isSelected ? (
                 <span className="text-muted-foreground">
-                  {selectedSource?.label || 'No source selected'}
+                  {selectedSource?.label || 'Not in use'}
                 </span>
               ) : (
                 <span className="text-muted-foreground italic">Not in use</span>
