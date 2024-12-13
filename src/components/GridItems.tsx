@@ -66,12 +66,30 @@ const GridItems = ({
 
     case 'me':
       return (
-        <MEBoxes
-          items={selectedMenu.items}
-          selectedItems={selectedItems}
-          onItemSelect={onItemSelect}
-          sideMenuItems={sideMenuItems}
-        />
+        <div className="grid grid-cols-3 gap-4">
+          {selectedMenu.items.map((item) => (
+            <button
+              key={item.id}
+              onClick={() => onItemSelect(selectedSideItem, item.label)}
+              className={`p-6 rounded-lg backdrop-blur-sm transition-all duration-300 ${
+                selectedItems[selectedSideItem]?.includes(item.label)
+                  ? 'bg-menu-active text-white shadow-lg'
+                  : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
+              }`}
+            >
+              {item.previewImage && (
+                <div className="w-full aspect-video mb-2 rounded overflow-hidden">
+                  <img
+                    src={item.previewImage}
+                    alt={item.label}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+              <span className="text-sm font-medium tracking-wide">{item.label}</span>
+            </button>
+          ))}
+        </div>
       );
 
     case 'clips':
