@@ -83,8 +83,10 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
                     </motion.button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent 
-                    className="w-56 bg-menu-darker text-white z-50"
+                    className="w-56 bg-menu-darker text-white"
                     align="start"
+                    sideOffset={5}
+                    style={{ zIndex: 9999 }}
                   >
                     {sourceItems.map((source: any) => (
                       <DropdownMenuItem
