@@ -12,6 +12,8 @@ interface MEBoxesProps {
 const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesProps) => {
   const getLayoutClassName = (layout: string) => {
     switch (layout) {
+      case '1-box':
+        return 'grid-cols-1';
       case '2-split':
         return 'grid-cols-2';
       case '3-split':
@@ -19,7 +21,7 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
       case '4-grid':
         return 'grid-cols-2 grid-rows-2';
       default:
-        return 'grid-cols-2';
+        return 'grid-cols-1';
     }
   };
 

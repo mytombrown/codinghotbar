@@ -83,6 +83,16 @@ export const sideMenuItems: SideMenuItem[] = [
     label: 'Custom Video',
     items: [
       {
+        id: 'me0',
+        label: 'Single',
+        type: 'box',
+        layout: '1-box',
+        previewImage: '/lovable-uploads/be6ae28c-2563-4e5b-a30b-5593635e2bc6.png',
+        boxes: [
+          { id: 'box1', label: 'Box 1', selectedSource: null }
+        ]
+      },
+      {
         id: 'me1',
         label: 'Split 2',
         type: 'box',
