@@ -37,6 +37,8 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
     return '';
   };
 
+  const sourceItems = sideMenuItems.find(menu => menu.id === 'source')?.items || [];
+
   return (
     <div className="w-full relative">
       <div className="before:content-[''] before:block before:pb-[56.25%]" />
@@ -80,21 +82,22 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
                       </div>
                     </motion.button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56 bg-menu-darker text-white">
-                    {sideMenuItems
-                      .find(menu => menu.id === 'source')
-                      ?.items?.map((source: any) => (
-                        <DropdownMenuItem
-                          key={source.id}
-                          onClick={() => {
-                            box.selectedSource = source;
-                            onItemSelect('me', item.label);
-                          }}
-                          className="cursor-pointer hover:bg-menu-active"
-                        >
-                          {source.label}
-                        </DropdownMenuItem>
-                      ))}
+                  <DropdownMenuContent 
+                    className="w-56 bg-menu-darker text-white z-50"
+                    align="start"
+                  >
+                    {sourceItems.map((source: any) => (
+                      <DropdownMenuItem
+                        key={source.id}
+                        onClick={() => {
+                          box.selectedSource = source;
+                          onItemSelect('me', item.label);
+                        }}
+                        className="cursor-pointer hover:bg-menu-active"
+                      >
+                        {source.label}
+                      </DropdownMenuItem>
+                    ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
