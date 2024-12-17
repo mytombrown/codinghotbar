@@ -86,10 +86,46 @@ export const sideMenuItems: SideMenuItem[] = [
     items: [
       {
         id: 'me1',
-        label: '1:1',
+        label: '2-Split Horizontal',
         type: 'box',
         layout: '2-split',
-        previewImage: '/lovable-uploads/6a821d0d-80f9-4e41-a715-0bf511a50790.png',
+        previewImage: '/lovable-uploads/c19f54ac-b300-4c14-bad3-e84734fb6d2b.png',
+        boxes: [
+          { id: 'box1', label: 'Box 1', selectedSource: null },
+          { id: 'box2', label: 'Box 2', selectedSource: null }
+        ]
+      },
+      {
+        id: 'me2',
+        label: '3-Split',
+        type: 'box',
+        layout: '3-split',
+        previewImage: '/lovable-uploads/299e1504-edd8-4a0a-abaf-181fa5ac4ea1.png',
+        boxes: [
+          { id: 'box1', label: 'Box 1', selectedSource: null },
+          { id: 'box2', label: 'Box 2', selectedSource: null },
+          { id: 'box3', label: 'Box 3', selectedSource: null }
+        ]
+      },
+      {
+        id: 'me3',
+        label: '4-Grid',
+        type: 'box',
+        layout: '4-grid',
+        previewImage: '/lovable-uploads/df42a799-9460-4c42-9d1e-7531436c8082.png',
+        boxes: [
+          { id: 'box1', label: 'Box 1', selectedSource: null },
+          { id: 'box2', label: 'Box 2', selectedSource: null },
+          { id: 'box3', label: 'Box 3', selectedSource: null },
+          { id: 'box4', label: 'Box 4', selectedSource: null }
+        ]
+      },
+      {
+        id: 'me4',
+        label: '2-Split Vertical',
+        type: 'box',
+        layout: '2-split-vertical',
+        previewImage: '/lovable-uploads/667efea6-70a3-4bad-bfba-b2169adce606.png',
         boxes: [
           { id: 'box1', label: 'Box 1', selectedSource: null },
           { id: 'box2', label: 'Box 2', selectedSource: null }

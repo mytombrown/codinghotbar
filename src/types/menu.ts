@@ -28,7 +28,7 @@ export interface SideMenuItem {
     lowerThirds?: LowerThirdData[];
     type?: string;
     selectedSource?: any;
-    layout?: '1-box' | '2-split' | '3-split' | '4-grid';
+    layout?: '1-box' | '2-split' | '3-split' | '4-grid' | '2-split-vertical';
     boxes?: MEBox[];
   }>;
 }
