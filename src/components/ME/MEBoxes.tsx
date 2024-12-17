@@ -99,23 +99,27 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
               "grid gap-4 p-4 bg-menu-darker",
               getLayoutClassName(item.layout)
             )}>
-              {item.boxes.map((box: any, index: number) => (
+              {item.boxes.map((box: any) => (
                 <div key={box.id} className="space-y-2">
                   <div className="relative w-full aspect-video mb-2 rounded overflow-hidden bg-gray-900">
                     {box.selectedSource ? (
-                      <img
-                        src={getSourceThumbnail(box.selectedSource.label)}
-                        alt={box.selectedSource.label}
-                        className="w-full h-full object-cover"
-                      />
+                      <>
+                        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm">
+                          <img
+                            src={getSourceThumbnail(box.selectedSource.label)}
+                            alt={box.selectedSource.label}
+                            className="w-full h-full object-cover opacity-90"
+                          />
+                          <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-2 text-white text-sm">
+                            {box.selectedSource.label}
+                          </div>
+                        </div>
+                      </>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">
                         No source selected
                       </div>
                     )}
-                    <div className="absolute top-2 left-2 bg-black/70 text-white px-2 py-1 rounded text-sm">
-                      {index + 1}
-                    </div>
                   </div>
                   <label className="text-xs text-menu-subtext">{box.label}</label>
                   <Select
