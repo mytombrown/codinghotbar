@@ -116,7 +116,6 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
                       </div>
                     )}
                   </div>
-                  <label className="text-xs text-menu-subtext">{box.label}</label>
                   <Select
                     value={box.selectedSource?.label || ''}
                     onValueChange={(value) => handleSourceSelect(box.id, value, item.label)}
