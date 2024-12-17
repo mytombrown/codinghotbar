@@ -16,73 +16,34 @@ interface MEBoxesProps {
   sideMenuItems: any[];
 }
 
-const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesProps) => {
-  const getLayoutClassName = (layout: string) => {
-    switch (layout) {
-      case '2-split':
-        return 'grid-cols-2';
-      case '3-split':
-        return 'grid-cols-3';
-      case '4-grid':
-        return 'grid-cols-2 grid-rows-2';
-      case '2-split-vertical':
-        return 'grid-cols-2';
-      default:
-        return 'grid-cols-1';
-    }
-  };
-
-  const sources = sideMenuItems.find(item => item.id === 'source')?.items || [];
-
-  const handleSourceSelect = (boxId: string, sourceLabel: string, itemLabel: string) => {
-    console.log('Source selected:', { boxId, sourceLabel, itemLabel });
-    // Here you would update the source selection in your state management
-  };
-
+const MEBoxes = ({ items, selectedItems, onItemSelect }: MEBoxesProps) => {
+  // Display all available ME layouts as buttons
   return (
-    <div className="w-full relative">
-      <div className="before:content-[''] before:block before:pb-[56.25%]" />
-      {items.map((item: any) => (
-        <div 
+    <div className="grid grid-cols-2 gap-4">
+      {items.map((item) => (
+        <motion.button
           key={item.id}
+          onClick={() => onItemSelect('me', item.label)}
           className={cn(
-            "absolute inset-0 p-4 bg-[#1e3a8a] rounded-lg",
-            selectedItems['me']?.includes(item.label) ? 'block' : 'hidden'
+            "p-4 rounded-lg backdrop-blur-sm transition-all duration-300",
+            selectedItems['me']?.includes(item.label)
+              ? 'bg-menu-active text-white shadow-lg'
+              : 'bg-menu-darker/80 text-menu-subtext hover:bg-menu-highlight'
           )}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
         >
-          <div className={cn(
-            "grid gap-4 h-full",
-            getLayoutClassName(item.layout)
-          )}>
-            {item.boxes.map((box: any) => (
-              <div 
-                key={box.id} 
-                className="relative bg-black rounded-lg overflow-hidden"
-                onClick={() => onItemSelect('me', item.label)}
-              >
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <Select
-                    onValueChange={(value) => handleSourceSelect(box.id, value, item.label)}
-                  >
-                    <SelectTrigger className="w-[180px] bg-black/50 border-none text-white">
-                      <SelectValue placeholder={`Select ${box.label} source`} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {sources.map((source: any) => (
-                        <SelectItem key={source.id} value={source.label}>
-                          {source.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="absolute bottom-2 left-2 text-white text-sm bg-black/50 px-2 py-1 rounded">
-                  {box.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+          {item.previewImage && (
+            <div className="w-full aspect-video mb-2 rounded overflow-hidden">
+              <img
+                src={item.previewImage}
+                alt={item.label}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+          <span className="text-sm font-medium tracking-wide">{item.label}</span>
+        </motion.button>
       ))}
     </div>
   );
