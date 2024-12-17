@@ -96,9 +96,9 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
             )}>
               {item.boxes.map((box: any) => (
                 <div key={box.id} className="space-y-2">
-                  <div className="relative w-full aspect-video rounded overflow-hidden bg-gray-900">
+                  <div className="w-full aspect-video rounded overflow-hidden bg-gray-900">
                     {box.selectedSource ? (
-                      <>
+                      <div className="relative w-full h-full">
                         <img
                           src={box.selectedSource.previewImage}
                           alt={box.selectedSource.label}
@@ -109,10 +109,12 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
                             {box.selectedSource.label}
                           </span>
                         </div>
-                      </>
+                      </div>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">
-                        No source selected
+                        <span className="text-4xl font-bold">
+                          {box.id === 'box1' ? '1' : box.id === 'box2' ? '2' : box.id === 'box3' ? '3' : '4'}
+                        </span>
                       </div>
                     )}
                   </div>
