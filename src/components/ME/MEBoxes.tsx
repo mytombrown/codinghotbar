@@ -35,7 +35,27 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
 
   const handleSourceSelect = (boxId: string, sourceLabel: string, itemLabel: string) => {
     console.log('Source selected:', { boxId, sourceLabel, itemLabel });
-    // Here you would update the source selection in your state management
+    // Find the item and update its box's selectedSource
+    const updatedItems = items.map(item => {
+      if (item.label === itemLabel) {
+        return {
+          ...item,
+          boxes: item.boxes.map((box: any) => {
+            if (box.id === boxId) {
+              return {
+                ...box,
+                selectedSource: { label: sourceLabel }
+              };
+            }
+            return box;
+          })
+        };
+      }
+      return item;
+    });
+    
+    // Update the ME selection to trigger a re-render
+    onItemSelect('me', itemLabel);
   };
 
   const getSourceThumbnail = (sourceLabel: string) => {
@@ -81,21 +101,26 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
             )}>
               {item.boxes.map((box: any) => (
                 <div key={box.id} className="space-y-2">
-                  {box.selectedSource && (
-                    <div className="w-full aspect-video mb-2 rounded overflow-hidden">
+                  <div className="w-full aspect-video mb-2 rounded overflow-hidden bg-gray-900">
+                    {box.selectedSource ? (
                       <img
                         src={getSourceThumbnail(box.selectedSource.label)}
                         alt={box.selectedSource.label}
                         className="w-full h-full object-cover"
                       />
-                    </div>
-                  )}
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">
+                        No source selected
+                      </div>
+                    )}
+                  </div>
                   <label className="text-xs text-menu-subtext">{box.label}</label>
                   <Select
+                    value={box.selectedSource?.label}
                     onValueChange={(value) => handleSourceSelect(box.id, value, item.label)}
                   >
                     <SelectTrigger className="w-full bg-menu-darker border-menu-highlight">
-                      <SelectValue placeholder={`Select source`} />
+                      <SelectValue placeholder="Select source" />
                     </SelectTrigger>
                     <SelectContent>
                       {sources.map((source: any) => (
