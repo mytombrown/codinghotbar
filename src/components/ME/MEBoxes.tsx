@@ -44,7 +44,7 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
             if (box.id === boxId) {
               return {
                 ...box,
-                selectedSource: { label: sourceLabel }
+                selectedSource: sources.find(src => src.label === sourceLabel)
               };
             }
             return box;
@@ -103,18 +103,18 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
                 <div key={box.id} className="space-y-2">
                   <div className="relative w-full aspect-video mb-2 rounded overflow-hidden bg-gray-900">
                     {box.selectedSource ? (
-                      <>
-                        <div className="absolute inset-0 bg-black/70 backdrop-blur-sm">
-                          <img
-                            src={getSourceThumbnail(box.selectedSource.label)}
-                            alt={box.selectedSource.label}
-                            className="w-full h-full object-cover opacity-90"
-                          />
-                          <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-2 text-white text-sm">
+                      <div className="absolute inset-0">
+                        <img
+                          src={getSourceThumbnail(box.selectedSource.label)}
+                          alt={box.selectedSource.label}
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-2">
+                          <span className="text-white text-sm">
                             {box.selectedSource.label}
-                          </div>
+                          </span>
                         </div>
-                      </>
+                      </div>
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">
                         No source selected
@@ -123,7 +123,7 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
                   </div>
                   <label className="text-xs text-menu-subtext">{box.label}</label>
                   <Select
-                    value={box.selectedSource?.label}
+                    value={box.selectedSource?.label || ''}
                     onValueChange={(value) => handleSourceSelect(box.id, value, item.label)}
                   >
                     <SelectTrigger className="w-full bg-menu-darker border-menu-highlight">
