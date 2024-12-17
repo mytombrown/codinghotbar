@@ -38,6 +38,11 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
     // Here you would update the source selection in your state management
   };
 
+  const getSourceThumbnail = (sourceLabel: string) => {
+    const source = sources.find(src => src.label === sourceLabel);
+    return source?.previewImage || null;
+  };
+
   return (
     <div className="grid grid-cols-2 gap-8">
       {items.map((item) => (
@@ -76,6 +81,15 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
             )}>
               {item.boxes.map((box: any) => (
                 <div key={box.id} className="space-y-2">
+                  {box.selectedSource && (
+                    <div className="w-full aspect-video mb-2 rounded overflow-hidden">
+                      <img
+                        src={getSourceThumbnail(box.selectedSource.label)}
+                        alt={box.selectedSource.label}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
                   <label className="text-xs text-menu-subtext">{box.label}</label>
                   <Select
                     onValueChange={(value) => handleSourceSelect(box.id, value, item.label)}
