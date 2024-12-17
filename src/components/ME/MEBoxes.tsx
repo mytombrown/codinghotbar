@@ -109,7 +109,7 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
                         </div>
                       </div>
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">
+                      <div className="w-full h-full flex items-center justify-center text-gray-500">
                         <span className="text-4xl font-bold">
                           {box.id === 'box1' ? '1' : box.id === 'box2' ? '2' : box.id === 'box3' ? '3' : '4'}
                         </span>
