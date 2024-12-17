@@ -37,7 +37,6 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
     console.log('Source selected:', { boxId, sourceLabel, itemLabel });
     const selectedSource = sources.find(src => src.label === sourceLabel);
     
-    // Find the item and update its box's selectedSource
     const updatedItems = items.map(item => {
       if (item.label === itemLabel) {
         return {
@@ -56,7 +55,6 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
       return item;
     });
     
-    // Update the ME selection to trigger a re-render
     onItemSelect('me', itemLabel);
   };
 
@@ -105,7 +103,7 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
                           className="w-full h-full object-cover"
                         />
                         <div className="absolute bottom-0 left-0 right-0 bg-black/80 p-2">
-                          <span className="text-white text-sm">
+                          <span className="text-white text-sm font-medium">
                             {box.selectedSource.label}
                           </span>
                         </div>
