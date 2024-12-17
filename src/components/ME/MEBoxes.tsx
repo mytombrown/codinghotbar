@@ -35,6 +35,8 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
 
   const handleSourceSelect = (boxId: string, sourceLabel: string, itemLabel: string) => {
     console.log('Source selected:', { boxId, sourceLabel, itemLabel });
+    const selectedSource = sources.find(src => src.label === sourceLabel);
+    
     // Find the item and update its box's selectedSource
     const updatedItems = items.map(item => {
       if (item.label === itemLabel) {
@@ -44,7 +46,7 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
             if (box.id === boxId) {
               return {
                 ...box,
-                selectedSource: sources.find(src => src.label === sourceLabel)
+                selectedSource
               };
             }
             return box;
@@ -56,11 +58,6 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
     
     // Update the ME selection to trigger a re-render
     onItemSelect('me', itemLabel);
-  };
-
-  const getSourceThumbnail = (sourceLabel: string) => {
-    const source = sources.find(src => src.label === sourceLabel);
-    return source?.previewImage || null;
   };
 
   return (
@@ -78,7 +75,6 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
           whileTap={{ scale: 0.98 }}
           onClick={() => onItemSelect('me', item.label)}
         >
-          {/* Preview Image */}
           {item.previewImage && (
             <div className="w-full aspect-video mb-4">
               <img
@@ -93,7 +89,6 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
             {item.label}
           </span>
 
-          {/* Source Selection Dropdowns */}
           {selectedItems['me']?.includes(item.label) && (
             <div className={cn(
               "grid gap-4 p-4 bg-menu-darker",
@@ -105,7 +100,7 @@ const MEBoxes = ({ items, selectedItems, onItemSelect, sideMenuItems }: MEBoxesP
                     {box.selectedSource ? (
                       <div className="absolute inset-0">
                         <img
-                          src={getSourceThumbnail(box.selectedSource.label)}
+                          src={box.selectedSource.previewImage}
                           alt={box.selectedSource.label}
                           className="w-full h-full object-cover"
                         />
